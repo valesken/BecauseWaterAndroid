@@ -3,6 +3,7 @@ package org.becausewater.dropin;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -51,6 +52,10 @@ public class HomeActivity extends Activity
             break;
         case 2:
             mTitle = getString(R.string.about_drop_in_app);
+            /*new AlertDialog.Builder(this)
+        		.setMessage(R.string.about_drop_in_app_content)
+        		.setTitle(R.string.about_drop_in_app)
+        		.create();*/
             break;
         case 3:
             mTitle = getString(R.string.about_because_water);

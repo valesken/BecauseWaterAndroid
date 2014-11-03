@@ -50,7 +50,9 @@ public final class R {
     }
     public static final class string {
         public static final int about_because_water=0x7f050002;
+        public static final int about_because_water_content=0x7f050008;
         public static final int about_drop_in_app=0x7f050001;
+        public static final int about_drop_in_app_content=0x7f050007;
         public static final int action_example=0x7f050005;
         public static final int action_settings=0x7f050006;
         public static final int app_name=0x7f050000;
