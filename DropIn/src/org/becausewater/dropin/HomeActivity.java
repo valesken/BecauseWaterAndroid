@@ -1,12 +1,9 @@
 package org.becausewater.dropin;
 
-import android.app.Activity;
-
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 
-public class HomeActivity extends Activity
+public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -35,15 +34,14 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         
-        final FragmentManager fm = getFragmentManager();
+        final FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft;
         if (savedInstanceState == null) {
             ft = fm.beginTransaction();
             ft.add(R.id.container, new Placeholder_Fragment()).commit();
         }
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -80,8 +78,8 @@ public class HomeActivity extends Activity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        ActionBar actionBar = getSupportActionBar();
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }

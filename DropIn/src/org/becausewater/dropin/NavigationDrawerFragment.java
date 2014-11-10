@@ -2,9 +2,10 @@ package org.becausewater.dropin;
 
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
@@ -134,7 +135,6 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -259,12 +259,12 @@ public class NavigationDrawerFragment extends Fragment {
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
 
     private ActionBar getActionBar() {
-        return getActivity().getActionBar();
+        return ((ActionBarActivity)getActivity()).getSupportActionBar();
     }
 
     /**
