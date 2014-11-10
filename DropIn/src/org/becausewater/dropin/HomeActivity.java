@@ -1,10 +1,10 @@
 package org.becausewater.dropin;
 
-import android.app.Activity;
-
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 
-public class HomeActivity extends Activity
+public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -31,9 +33,15 @@ public class HomeActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        
+        final FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft;
+        if (savedInstanceState == null) {
+            ft = fm.beginTransaction();
+            ft.add(R.id.container, new Placeholder_Fragment()).commit();
+        }
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -44,28 +52,34 @@ public class HomeActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        switch (position+1) {
+        // update the main content by showing dialogs with About info
+        switch (position) {
+        case 0:
+            new AlertDialog.Builder(this)
+        		.setMessage(R.string.about_drop_in_app_content)
+        		.setTitle(R.string.about_drop_in_app)
+        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+    				@Override
+    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
+    			})
+        		.show();
+            break;
         case 1:
-            mTitle = getString(R.string.app_name);
-            break;
-        case 2:
-            mTitle = getString(R.string.about_drop_in_app);
-            break;
-        case 3:
-            mTitle = getString(R.string.about_because_water);
+            new AlertDialog.Builder(this)
+        		.setMessage(R.string.about_because_water_content)
+        		.setTitle(R.string.about_because_water)
+        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+    				@Override
+    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
+    			})
+        		.show();
             break;
         }
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, new PlaceholderFragment())
-                //.addToBackStack(null)
-                .commit();
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        ActionBar actionBar = getSupportActionBar();
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
@@ -95,21 +109,19 @@ public class HomeActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
-
+    
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class Placeholder_Fragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public Placeholder_Fragment() {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
         }
     }
-
 }
