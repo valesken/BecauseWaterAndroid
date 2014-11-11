@@ -13,5 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Map Goes Here" />
+    
+    <RelativeLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#d3d3d3">
+        
+        <Button
+            android:id="@+id/add_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="add" />
+        
+    </RelativeLayout>
 
 </RelativeLayout>
