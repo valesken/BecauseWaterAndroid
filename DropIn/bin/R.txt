@@ -350,11 +350,13 @@ int id action_menu_presenter 0x7f05001d
 int id action_mode_bar 0x7f050030
 int id action_mode_bar_stub 0x7f05002f
 int id action_mode_close_button 0x7f050022
-int id action_settings 0x7f050045
+int id action_settings 0x7f050047
 int id activity_chooser_view_content 0x7f050023
+int id add_new 0x7f050046
 int id always 0x7f05000d
 int id beginning 0x7f050012
 int id bottom 0x7f050016
+int id bottom_bar 0x7f050045
 int id checkbox 0x7f05002b
 int id collapseActionView 0x7f05000f
 int id container 0x7f050042
