@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -110,6 +111,12 @@ public class HomeActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
+    public void toAdd(View b) {
+		Toast
+		  .makeText(this, "\"Add\" Button Pressed", Toast.LENGTH_SHORT)
+		  .show();
+    }
+    
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -123,5 +130,19 @@ public class HomeActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
         }
+        
+    }
+    
+    public static class Add_Fragment extends Fragment {
+    	
+    	public Add_Fragment() {
+    	}
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_add, container, false);
+            return rootView;
+        }
+    	
     }
 }
