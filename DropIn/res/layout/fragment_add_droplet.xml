@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E5E5" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="5dp" >
+        
+		<!-- Use My Location Button -->
+		<Button
+			android:id="@+id/use_my_loc_button"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content" 
+			android:layout_margin="1dp"
+        	android:text="Use My Location"
+        	android:background="#FFFFFF" />
+
+		<!-- Enter An Address TextView -->
+		
+		<View 
+		    android:id="@+id/separator1"
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+    		android:layout_below="@+id/use_my_loc_button" />
+
+    	<TextView
+    		android:id="@+id/enter_address"
+    		android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_below="@+id/separator1"
+    		android:text="ENTER AN ADDRESS"
+    		android:textColor="#000000" />
+
+		<!-- User Address Entering EditText -->
+	
+		<EditText
+			android:id="@+id/user_inaddress"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/enter_address"
+			android:layout_margin="1dp"
+        	android:text="140 Bay State Rd, Boston, MA, 02215"
+        	android:inputType="text"
+        	android:background="#FFFFFF" />
+        
+
+		<!-- Submit Button -->
+
+		<Button
+        	android:id="@+id/submit_button"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_below="@+id/user_inaddress"
+			android:layout_margin="1dp"
+        	android:text="Submit"
+        	android:background="#FFFFFF" />
+
+		<!-- Cancel Button -->
+		<Button
+			android:id="@+id/cancel_add_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content" 
+        	android:layout_below="@+id/submit_button"
+        	android:layout_centerHorizontal="true"
+			android:layout_margin="1dp"
+        	android:text="Cancel"
+        	android:background="#FFFFFF" />
+		
+	</RelativeLayout>
+
+</RelativeLayout>
