@@ -1,5 +1,9 @@
 package org.becausewater.dropin;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -12,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -39,6 +46,7 @@ public class HomeActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private MapFragment map;
     static FragmentManager fm;
     static FragmentTransaction ft;
 
@@ -47,9 +55,10 @@ public class HomeActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         fm = getSupportFragmentManager();
+        map = new MapFragment();
         if (savedInstanceState == null) {
             ft = fm.beginTransaction();
-            ft.add(R.id.container, new MapFragment())
+            ft.add(R.id.container, map)
               .commit();
         }
 
@@ -122,6 +131,10 @@ public class HomeActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
+    public void toAdd(View b) {
+    	map.toAdd(b);
+    }
+    
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -129,6 +142,9 @@ public class HomeActivity extends ActionBarActivity
 
     	MapView mapView;
     	GoogleMap map;
+    	LocationManager locationManager;
+    	double latitude, longitude;
+    	View rootView;
     	
         public MapFragment() {
         }
@@ -136,7 +152,9 @@ public class HomeActivity extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            
+            LatLng myLatLng;
+            CameraPosition myPosition;
+        	
             // get MapView from layout
             mapView = (MapView) rootView.findViewById(R.id.mapview);
             mapView.onCreate(savedInstanceState);
@@ -144,31 +162,45 @@ public class HomeActivity extends ActionBarActivity
             map = mapView.getMap();
             MapsInitializer.initialize(mapView.getContext());
             map.setMyLocationEnabled(true);
-            LocationManager locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
+            //LocationManager locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
             map.getUiSettings().setZoomControlsEnabled(true);
             
             Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            CameraPosition myPosition = new CameraPosition.Builder()
-             .target(myLatLng)
-             .zoom(16)
-             .bearing(0)
-             .tilt(0)
-             .build();
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            if(myLocation != null) {
+            	myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            	myPosition = new CameraPosition.Builder()
+            		.target(myLatLng)
+            		.zoom(16)
+            		.bearing(0)
+            		.tilt(0)
+            		.build();
+            	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            }
+            else {
+            	myLatLng = new LatLng(42.3581, -71.0636); // Boston
+            	myPosition = new CameraPosition.Builder()
+            		.target(myLatLng)
+            		.zoom(16)
+            		.bearing(0)
+            		.tilt(0)
+            		.build();
+            	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            }
             
-            Button add_new = (Button) rootView.findViewById(R.id.add_new);
-            add_new.setOnClickListener(new OnClickListener() {
-    			@Override
-    			public void onClick(View v) {
-    				ft = fm.beginTransaction();
-    		    	Add_Fragment af = new Add_Fragment();
-    		        ft.add(R.id.container, af)
-    		          .addToBackStack("af")
-    		          .commit();
-    			}
-    		});
             return rootView;
+        }
+        
+        // Testing
+        public void toAdd(View b) {
+        	Location myLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	latitude = myLoc.getLatitude();
+        	longitude = myLoc.getLongitude();
+        	ft = fm.beginTransaction();
+        	Add_Fragment af = new Add_Fragment(latitude, longitude);
+        	ft.add(R.id.container, af)
+        	  .addToBackStack("af")
+        	  .commit();
         }
         
         @Override
@@ -192,12 +224,47 @@ public class HomeActivity extends ActionBarActivity
     
     public static class Add_Fragment extends Fragment {
     	
+    	private double longitude, latitude;
+    	
     	public Add_Fragment() {
+    		latitude = 0;
+    		longitude = 0;
+    	}
+    	
+    	public Add_Fragment(double lat, double lon) {
+    		latitude = lat;
+    		longitude = lon;
     	}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
+            List<Address> addresses;
+
+            // Convert longitude & latitude to address and change addr's text to the address
+            EditText enter_address = (EditText) rootView.findViewById(R.id.user_inaddress);
+            Geocoder geocoder = new Geocoder(rootView.getContext(), Locale.getDefault());
+            Address address;
+            String result = "42 Bay State Rd, Boston, MA, 02215";
+            try{
+            	for(int i = 0; i < 10; ++i) {
+            		addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            		if(!addresses.isEmpty()) {
+            			address = addresses.get(0);
+            			
+            			result = String.format("%s, %s, %s, %s", 
+            					(address.getMaxAddressLineIndex() > 0) ? address.getAddressLine(0) : "", 
+            					(address.getLocality() != null) ? address.getLocality() : "",
+            					(address.getAdminArea() != null) ? address.getAdminArea() : "",
+            					(address.getPostalCode() != null) ? address.getPostalCode() : "");
+            			break;
+            		}
+            	}
+            }
+            catch(IOException e) {
+            	e.printStackTrace();
+            }
+            enter_address.setText(result);
             
             Button cancel = (Button) rootView.findViewById(R.id.cancel_add_button);
             cancel.setOnClickListener(new OnClickListener() {
