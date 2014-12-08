@@ -2175,9 +2175,10 @@ containing a value of this type.
         public static final int activity_home=0x7f030017;
         public static final int fragment_add=0x7f030018;
         public static final int fragment_add_droplet=0x7f030019;
-        public static final int fragment_home=0x7f03001a;
-        public static final int fragment_navigation_drawer=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int fragment_confirm=0x7f03001a;
+        public static final int fragment_home=0x7f03001b;
+        public static final int fragment_navigation_drawer=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
     }
     public static final class menu {
         public static final int global=0x7f0c0000;
