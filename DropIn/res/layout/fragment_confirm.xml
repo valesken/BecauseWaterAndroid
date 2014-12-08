@@ -182,7 +182,7 @@
     	    android:layout_height="wrap_content"
     	    android:layout_width="wrap_content"
     	    android:layout_margin="2dp"
-    	    android:weight="1"
+    	    android:layout_weight="1"
     	    android:text="Back"
         	android:background="#FFFFFF" />
     	
@@ -191,7 +191,7 @@
         	android:layout_height="wrap_content"
         	android:layout_width="wrap_content"
     	    android:layout_margin="2dp"
-        	android:weight="1"
+        	android:layout_weight="1"
         	android:text="Confirm"
         	android:background="#FFFFFF" />
     	

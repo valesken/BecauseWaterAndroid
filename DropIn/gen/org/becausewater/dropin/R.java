@@ -2039,21 +2039,26 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f080041;
         public static final int action_mode_bar_stub=0x7f080040;
         public static final int action_mode_close_button=0x7f080033;
-        public static final int action_settings=0x7f08005e;
+        public static final int action_settings=0x7f080067;
         public static final int activity_chooser_view_content=0x7f080034;
-        public static final int add_new=0x7f08005d;
+        public static final int add_new=0x7f080066;
+        public static final int address=0x7f08005c;
         public static final int always=0x7f08001e;
+        public static final int back_button=0x7f080062;
         public static final int beginning=0x7f080023;
         public static final int book_now=0x7f080010;
         public static final int bottom=0x7f080027;
-        public static final int bottom_bar=0x7f08005c;
+        public static final int bottom_bar=0x7f080065;
         public static final int buyButton=0x7f08000a;
         public static final int buy_now=0x7f08000f;
         public static final int buy_with_google=0x7f08000e;
         public static final int cancel_add_button=0x7f08005a;
         public static final int checkbox=0x7f08003c;
+        public static final int city=0x7f08005d;
         public static final int classic=0x7f080011;
         public static final int collapseActionView=0x7f080020;
+        public static final int confirm_button=0x7f080063;
+        public static final int confirm_center_container=0x7f08005b;
         public static final int container=0x7f080053;
         public static final int decor_content_parent=0x7f080042;
         public static final int default_activity_button=0x7f080037;
@@ -2075,9 +2080,11 @@ containing a value of this type.
         public static final int icon=0x7f080039;
         public static final int ifRoom=0x7f08001d;
         public static final int image=0x7f080036;
+        public static final int latitude=0x7f080060;
         public static final int listMode=0x7f080014;
         public static final int list_item=0x7f080038;
-        public static final int mapview=0x7f08005b;
+        public static final int longitude=0x7f080061;
+        public static final int mapview=0x7f080064;
         public static final int match_parent=0x7f08000c;
         public static final int middle=0x7f080024;
         public static final int monochrome=0x7f080013;
@@ -2108,6 +2115,7 @@ containing a value of this type.
         public static final int showHome=0x7f080017;
         public static final int showTitle=0x7f080019;
         public static final int split_action_bar=0x7f08002c;
+        public static final int state=0x7f08005e;
         public static final int strict_sandbox=0x7f080009;
         public static final int submit_area=0x7f08004f;
         public static final int submit_button=0x7f080059;
@@ -2121,6 +2129,7 @@ containing a value of this type.
         public static final int user_inaddress=0x7f080058;
         public static final int withText=0x7f08001f;
         public static final int wrap_content=0x7f08000d;
+        public static final int zipcode=0x7f08005f;
     }
     public static final class integer {
         /**  The maximum number of action buttons that should be permitted within

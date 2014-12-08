@@ -10,6 +10,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
@@ -48,9 +49,9 @@ public class HomeActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private MapFragment map;
-    static FragmentManager fm;
-    static FragmentTransaction ft;
+    private static MapFragment map;
+    public static FragmentManager fm;
+    public static FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +138,10 @@ public class HomeActivity extends ActionBarActivity
     	map.toAdd(b);
     }
     
+    public static void addPin(double lat, double lon) {
+    	map.addPin(lat, lon);
+    }
+    
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -203,6 +208,12 @@ public class HomeActivity extends ActionBarActivity
         	ft.add(R.id.container, af)
         	  .addToBackStack("af")
         	  .commit();
+        }
+        
+        public void addPin(double lat, double lon) {
+        	map.addMarker(new MarkerOptions()
+        	   .position(new LatLng(lat, lon))
+        	   .title("test"));
         }
         
         @Override
@@ -307,6 +318,7 @@ public class HomeActivity extends ActionBarActivity
     	
     	private String result;
     	private Context context;
+    	private double latitude, longitude;
     	
     	public Confirm_Fragment() {
     		result = "";
@@ -343,8 +355,10 @@ public class HomeActivity extends ActionBarActivity
             			state.setText(address.getAdminArea());
             		if(address.getPostalCode() != null)
             			zipcode.setText(address.getPostalCode());
-            		lat.setText(Double.toString(address.getLatitude()));
-            		lon.setText(Double.toString(address.getLongitude()));
+            		latitude = address.getLatitude();
+            		longitude = address.getLongitude();
+            		lat.setText(Double.toString(latitude));
+            		lon.setText(Double.toString(longitude));
             	}
             }
             catch(IOException e) {
@@ -365,6 +379,7 @@ public class HomeActivity extends ActionBarActivity
 				public void onClick(View v) {
 					fm.popBackStack();
 					fm.popBackStack();
+					addPin(latitude, longitude);
 				}
 			});
             
