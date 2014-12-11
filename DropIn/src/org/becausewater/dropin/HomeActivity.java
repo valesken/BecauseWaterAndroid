@@ -10,11 +10,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -29,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -46,9 +49,9 @@ public class HomeActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private MapFragment map;
-    static FragmentManager fm;
-    static FragmentTransaction ft;
+    private static MapFragment map;
+    public static FragmentManager fm;
+    public static FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +138,10 @@ public class HomeActivity extends ActionBarActivity
     	map.toAdd(b);
     }
     
+    public static void addPin(double lat, double lon) {
+    	map.addPin(lat, lon);
+    }
+    
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -203,6 +210,12 @@ public class HomeActivity extends ActionBarActivity
         	  .commit();
         }
         
+        public void addPin(double lat, double lon) {
+        	map.addMarker(new MarkerOptions()
+        	   .position(new LatLng(lat, lon))
+        	   .title("test"));
+        }
+        
         @Override
         public void onResume() {
         	mapView.onResume();
@@ -225,6 +238,9 @@ public class HomeActivity extends ActionBarActivity
     public static class Add_Fragment extends Fragment {
     	
     	private double longitude, latitude;
+    	private String result;
+        private Context context;
+        private EditText enter_address;
     	
     	public Add_Fragment() {
     		latitude = 0;
@@ -240,12 +256,13 @@ public class HomeActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
             List<Address> addresses;
+            context = rootView.getContext();
 
             // Convert longitude & latitude to address and change addr's text to the address
-            EditText enter_address = (EditText) rootView.findViewById(R.id.user_inaddress);
-            Geocoder geocoder = new Geocoder(rootView.getContext(), Locale.getDefault());
+            enter_address = (EditText) rootView.findViewById(R.id.user_inaddress);
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             Address address;
-            String result = "42 Bay State Rd, Boston, MA, 02215";
+            result = "42 Bay State Rd, Boston, MA, 02215";
             try{
             	for(int i = 0; i < 10; ++i) {
             		addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -274,8 +291,99 @@ public class HomeActivity extends ActionBarActivity
     			}
     		});
             
+            Button submit = (Button) rootView.findViewById(R.id.submit_button);
+            submit.setOnClickListener(new OnClickListener() {
+            	@Override
+            	public void onClick(View v) {
+            		if(enter_address.getText().toString().length() > 0) {
+            			ft = fm.beginTransaction();
+            			Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString());
+            			ft.add(R.id.container, cf)
+            			  .addToBackStack("cf")
+            			  .commit();
+            		}
+            		else {
+            			Toast.makeText(context, "Please enter an address", Toast.LENGTH_LONG)
+            				.show();
+            		}
+            	}
+            });
+            
             return rootView;
         }
     	
+    }
+    
+    public static class Confirm_Fragment extends Fragment {
+    	
+    	private String result;
+    	private Context context;
+    	private double latitude, longitude;
+    	
+    	public Confirm_Fragment() {
+    		result = "";
+    	}
+    	
+    	public Confirm_Fragment(String r) {
+    		result = r;
+    	}
+    	
+    	@Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_confirm, container, false);
+            context = rootView.getContext();
+            
+            EditText addressLine = (EditText) rootView.findViewById(R.id.address);
+            EditText city = (EditText) rootView.findViewById(R.id.city);
+            EditText state = (EditText) rootView.findViewById(R.id.state);
+            EditText zipcode = (EditText) rootView.findViewById(R.id.zipcode);
+            EditText lat = (EditText) rootView.findViewById(R.id.latitude);
+            EditText lon = (EditText) rootView.findViewById(R.id.longitude);
+            
+            Geocoder geo = new Geocoder(context, Locale.getDefault());
+            List<Address> addressList;
+            Address address = null;
+            try {
+            	addressList = geo.getFromLocationName(result,5);
+            	if(addressList != null) {
+            		address = addressList.get(0);
+            		if(address.getMaxAddressLineIndex() > 0)
+            			addressLine.setText(address.getAddressLine(0));
+            		if(address.getLocality() != null )
+            			city.setText(address.getLocality());
+            		if(address.getAdminArea() != null)
+            			state.setText(address.getAdminArea());
+            		if(address.getPostalCode() != null)
+            			zipcode.setText(address.getPostalCode());
+            		latitude = address.getLatitude();
+            		longitude = address.getLongitude();
+            		lat.setText(Double.toString(latitude));
+            		lon.setText(Double.toString(longitude));
+            	}
+            }
+            catch(IOException e) {
+            	e.printStackTrace();
+            }
+
+            Button back = (Button) rootView.findViewById(R.id.back_button);
+            back.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					fm.popBackStack();
+				}
+			});
+            
+            Button confirm = (Button) rootView.findViewById(R.id.confirm_button);
+            confirm.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					fm.popBackStack();
+					fm.popBackStack();
+					addPin(latitude, longitude);
+				}
+			});
+            
+            return rootView;
+    	}
     }
 }
