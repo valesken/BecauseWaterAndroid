@@ -10,13 +10,27 @@
         android:layout_centerInParent="true"
         android:padding="5dp" >
         
+        <TextView
+            android:id="@+id/add_a_drop_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    		android:layout_marginLeft="10dp"
+    		android:layout_marginBottom="5dp"
+            android:text="ADD A DROP:"
+            android:textColor="#000000" />
+        
 		<!-- Use My Location Button -->
 		<Button
 			android:id="@+id/use_my_loc_button"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content" 
 			android:layout_margin="1dp"
+			android:layout_below="@+id/add_a_drop_text"
         	android:text="Use My Location"
+        	android:textSize="18sp"
+        	android:textColor="#0088FF"
+        	android:textAllCaps="false"
+        	android:textAlignment="center"
         	android:background="#FFFFFF" />
 
 		<!-- Enter An Address TextView -->
@@ -32,7 +46,9 @@
     		android:layout_width="match_parent"
     		android:layout_height="wrap_content"
     		android:layout_below="@+id/separator1"
-    		android:text="ENTER AN ADDRESS"
+    		android:layout_marginLeft="10dp"
+    		android:layout_marginBottom="5dp"
+    		android:text="ENTER AN ADDRESS:"
     		android:textColor="#000000" />
 
 		<!-- User Address Entering EditText -->
@@ -43,7 +59,8 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/enter_address"
 			android:layout_margin="1dp"
-        	android:text="140 Bay State Rd, Boston, MA, 02215"
+			android:padding="5dp"
+        	android:hint="140 Bay State Rd, Boston, MA, 02215"
         	android:inputType="text"
         	android:background="#FFFFFF" />
         
@@ -57,18 +74,18 @@
         	android:layout_below="@+id/user_inaddress"
 			android:layout_margin="1dp"
         	android:text="Submit"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:textAlignment="center"
         	android:background="#FFFFFF" />
-
-		<!-- Cancel Button -->
-		<Button
-			android:id="@+id/cancel_add_button"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content" 
-        	android:layout_below="@+id/submit_button"
-        	android:layout_centerHorizontal="true"
-			android:layout_margin="1dp"
-        	android:text="Cancel"
-        	android:background="#FFFFFF" />
+		
+		<TextView
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/submit_button"
+		    android:layout_margin="1dp"
+		    android:text="Enter an address above to add a drop, or use Location Service to automatically determine your location." />
 		
 	</RelativeLayout>
 

@@ -4,11 +4,13 @@
     <string name="app_name">DropIn</string>
     <string name="about_drop_in_app">About Drop In App</string>
     <string name="about_because_water">About Because Water</string>
+    <string name="online_store">Online Store</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="about_drop_in_app_content">Drop In App is an Android application built by BU\'s Global App Initiative on behalf of Because Water.</string>
     <string name="about_because_water_content">Because Water is a non-profit dedicated to water sustainability. See more at becausewater.org.</string>
-
+	<string name="privacy_policy_string">Because Water will never share your info with any third party.</string>
+    
 </resources>
