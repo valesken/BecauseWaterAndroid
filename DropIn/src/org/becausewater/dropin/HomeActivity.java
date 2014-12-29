@@ -23,6 +23,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +51,7 @@ public class HomeActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private static MapFragment map;
+    private Context context;
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
@@ -57,6 +59,7 @@ public class HomeActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        context = this;
         fm = getSupportFragmentManager();
         map = new MapFragment();
         if (savedInstanceState == null) {
@@ -67,11 +70,34 @@ public class HomeActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+
+        Button contactUs = (Button) findViewById(R.id.contact_us_button);
+        contactUs.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO: Create form to send email to specified email address
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+			}
+		});
+        Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
+        privacyPolicy.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+				new AlertDialog.Builder(context)
+					.setMessage(R.string.privacy_policy_string)
+					.setTitle("Privacy Policy")
+					.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
+					})
+					.show();
+			}
+		});
     }
 
     @Override
@@ -158,7 +184,7 @@ public class HomeActivity extends ActionBarActivity
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            rootView = inflater.inflate(R.layout.fragment_home, container, false);
             LatLng myLatLng;
             CameraPosition myPosition;
         	
@@ -283,14 +309,6 @@ public class HomeActivity extends ActionBarActivity
             }
             enter_address.setText(result);
             
-            Button cancel = (Button) rootView.findViewById(R.id.cancel_add_button);
-            cancel.setOnClickListener(new OnClickListener() {
-    			@Override
-    			public void onClick(View v) {
-    				fm.popBackStack();
-    			}
-    		});
-            
             Button submit = (Button) rootView.findViewById(R.id.submit_button);
             submit.setOnClickListener(new OnClickListener() {
             	@Override
@@ -319,6 +337,9 @@ public class HomeActivity extends ActionBarActivity
     	private String result;
     	private Context context;
     	private double latitude, longitude;
+    	MapView mapView2;
+    	GoogleMap map;
+    	LocationManager locationManager;
     	
     	public Confirm_Fragment() {
     		result = "";
@@ -333,12 +354,20 @@ public class HomeActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_confirm, container, false);
             context = rootView.getContext();
             
-            EditText addressLine = (EditText) rootView.findViewById(R.id.address);
+            /*EditText addressLine = (EditText) rootView.findViewById(R.id.address);
             EditText city = (EditText) rootView.findViewById(R.id.city);
             EditText state = (EditText) rootView.findViewById(R.id.state);
             EditText zipcode = (EditText) rootView.findViewById(R.id.zipcode);
             EditText lat = (EditText) rootView.findViewById(R.id.latitude);
-            EditText lon = (EditText) rootView.findViewById(R.id.longitude);
+            EditText lon = (EditText) rootView.findViewById(R.id.longitude);*/
+            
+            mapView2 = (MapView) rootView.findViewById(R.id.mapview2);
+            mapView2.onCreate(savedInstanceState);
+            map = mapView2.getMap();
+            MapsInitializer.initialize(mapView2.getContext());
+            map.setMyLocationEnabled(false);
+            locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
+            map.getUiSettings().setZoomControlsEnabled(false);
             
             Geocoder geo = new Geocoder(context, Locale.getDefault());
             List<Address> addressList;
@@ -347,33 +376,35 @@ public class HomeActivity extends ActionBarActivity
             	addressList = geo.getFromLocationName(result,5);
             	if(addressList != null) {
             		address = addressList.get(0);
-            		if(address.getMaxAddressLineIndex() > 0)
+            		/*if(address.getMaxAddressLineIndex() > 0)
             			addressLine.setText(address.getAddressLine(0));
             		if(address.getLocality() != null )
             			city.setText(address.getLocality());
             		if(address.getAdminArea() != null)
             			state.setText(address.getAdminArea());
             		if(address.getPostalCode() != null)
-            			zipcode.setText(address.getPostalCode());
+            			zipcode.setText(address.getPostalCode());*/
             		latitude = address.getLatitude();
             		longitude = address.getLongitude();
-            		lat.setText(Double.toString(latitude));
-            		lon.setText(Double.toString(longitude));
+            		/*lat.setText(Double.toString(latitude));
+            		lon.setText(Double.toString(longitude));*/
             	}
             }
             catch(IOException e) {
             	e.printStackTrace();
             }
-
-            Button back = (Button) rootView.findViewById(R.id.back_button);
-            back.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					fm.popBackStack();
-				}
-			});
             
-            Button confirm = (Button) rootView.findViewById(R.id.confirm_button);
+        	map.addMarker(new MarkerOptions()
+    			.position(new LatLng(latitude, longitude)));
+        	CameraPosition myPosition = new CameraPosition.Builder()
+				.target(new LatLng(latitude, longitude))
+				.zoom(16)
+				.bearing(0)
+				.tilt(0)
+				.build();
+        	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            
+            Button confirm = (Button) rootView.findViewById(R.id.add_drop_button);
             confirm.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -385,5 +416,23 @@ public class HomeActivity extends ActionBarActivity
             
             return rootView;
     	}
+        
+        @Override
+        public void onResume() {
+        	mapView2.onResume();
+        	super.onResume();
+        }
+        
+        @Override
+        public void onDestroy() {
+        	super.onDestroy();
+        	mapView2.onDestroy();
+        }
+        
+        @Override
+        public void onLowMemory() {
+        	super.onLowMemory();
+        	mapView2.onLowMemory();
+        }
     }
 }
