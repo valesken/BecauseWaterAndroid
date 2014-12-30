@@ -18,10 +18,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,6 +55,8 @@ public class HomeActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private static MapFragment map;
     private Context context;
+    private Intent launchBrowser;
+    private Uri storeURL;
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
@@ -81,6 +85,8 @@ public class HomeActivity extends ActionBarActivity {
         Button onlineStore = (Button) findViewById(R.id.online_store_button);
         Button contactUs = (Button) findViewById(R.id.contact_us_button);
         Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
+        
+        storeURL = Uri.parse("http://becausewater.org/store-2/");
         
         aboutDropInApp.setOnClickListener(new OnClickListener() {
 			@Override
@@ -115,6 +121,8 @@ public class HomeActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				// TODO: Create link to online store with "Back" button leading back to this app
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
+				launchBrowser = new Intent(Intent.ACTION_VIEW, storeURL); 
+				startActivity(launchBrowser);
 			}
 		});
         contactUs.setOnClickListener(new OnClickListener() {
