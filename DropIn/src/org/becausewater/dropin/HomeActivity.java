@@ -38,13 +38,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 
-public class HomeActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+//public class HomeActivity extends ActionBarActivity
+//        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class HomeActivity extends ActionBarActivity {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavDrawerFragment mNavDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -68,14 +69,54 @@ public class HomeActivity extends ActionBarActivity
               .commit();
         }
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavDrawerFragment = (NavDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+        mNavDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 
+        Button aboutDropInApp = (Button) findViewById(R.id.about_drop_in_app_button);
+        Button aboutBecauseWater = (Button) findViewById(R.id.about_because_water_button);
+        Button onlineStore = (Button) findViewById(R.id.online_store_button);
         Button contactUs = (Button) findViewById(R.id.contact_us_button);
+        Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
+        
+        aboutDropInApp.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+	            new AlertDialog.Builder(context)
+	        		.setMessage(R.string.about_drop_in_app_content)
+	        		.setTitle(R.string.about_drop_in_app)
+	        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+	    				@Override
+	    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
+	    			})
+	        		.show();
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+			}
+		});
+        aboutBecauseWater.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+	            new AlertDialog.Builder(context)
+	        		.setMessage(R.string.about_because_water_content)
+	        		.setTitle(R.string.about_because_water)
+	        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+	    				@Override
+	    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
+	    			})
+	        		.show();
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+			}
+		});
+        onlineStore.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO: Create link to online store with "Back" button leading back to this app
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+			}
+		});
         contactUs.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -83,7 +124,6 @@ public class HomeActivity extends ActionBarActivity
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
 			}
 		});
-        Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
         privacyPolicy.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -99,34 +139,7 @@ public class HomeActivity extends ActionBarActivity
 			}
 		});
     }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by showing dialogs with About info
-        switch (position) {
-        case 0:
-            new AlertDialog.Builder(this)
-        		.setMessage(R.string.about_drop_in_app_content)
-        		.setTitle(R.string.about_drop_in_app)
-        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-    				@Override
-    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
-    			})
-        		.show();
-            break;
-        case 1:
-            new AlertDialog.Builder(this)
-        		.setMessage(R.string.about_because_water_content)
-        		.setTitle(R.string.about_because_water)
-        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-    				@Override
-    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
-    			})
-        		.show();
-            break;
-        }
-    }
-
+    
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -137,7 +150,8 @@ public class HomeActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        //if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -168,9 +182,6 @@ public class HomeActivity extends ActionBarActivity
     	map.addPin(lat, lon);
     }
     
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class MapFragment extends Fragment {
 
     	MapView mapView;

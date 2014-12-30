@@ -1,10 +1,112 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E5E5E5"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    tools:context="org.becausewater.dropin.NavigationDrawerFragment" />
+    android:background="#E9E9E9"
+    tools:context="org.becausewater.dropin.NavigationDrawerFragment" >
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="20dp"
+        android:orientation="vertical" >
+        
+        <Button
+            android:id="@+id/about_because_water_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_because_water"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="#E9E9E9" />
+        
+        <!-- This is just a line divider - graphical cake icing -->
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+        
+        <Button
+            android:id="@+id/about_drop_in_app_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_drop_in_app"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="#E9E9E9" />
+        
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+        
+        <Button
+            android:id="@+id/online_store_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/online_store"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="#E9E9E9" />
+        
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+        
+    </LinearLayout>
+
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+    	android:layout_alignParentBottom="true"
+    	android:orientation="vertical" >
+    
+    	<Button
+        	android:id="@+id/contact_us_button"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="Contact Us"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="#E9E9E9" />
+        
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+    	
+    	<Button
+        	android:id="@+id/privacy_policy_button"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="Privacy Policy"
+        	android:textColor="#0088FF"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="#E9E9E9" />
+        
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+        
+        <View
+            android:layout_height="40dp"
+            android:layout_width="fill_parent" />
+
+	</LinearLayout>
+    
+</RelativeLayout>
 
