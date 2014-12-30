@@ -2026,8 +2026,8 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020055;
     }
     public static final class id {
-        public static final int about_because_water_button=0x7f080065;
-        public static final int about_drop_in_app_button=0x7f080066;
+        public static final int about_because_water_button=0x7f08006a;
+        public static final int about_drop_in_app_button=0x7f08006b;
         public static final int action_bar=0x7f080044;
         public static final int action_bar_activity_content=0x7f08002b;
         public static final int action_bar_container=0x7f080043;
@@ -2041,23 +2041,23 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f080041;
         public static final int action_mode_bar_stub=0x7f080040;
         public static final int action_mode_close_button=0x7f080033;
-        public static final int action_settings=0x7f08006a;
+        public static final int action_settings=0x7f08006f;
         public static final int activity_chooser_view_content=0x7f080034;
         public static final int add_a_drop_text=0x7f080055;
         public static final int add_drop_button=0x7f080061;
-        public static final int add_new=0x7f080064;
+        public static final int add_new=0x7f080069;
         public static final int always=0x7f08001e;
         public static final int beginning=0x7f080023;
         public static final int book_now=0x7f080010;
         public static final int bottom=0x7f080027;
-        public static final int bottom_bar=0x7f080063;
+        public static final int bottom_bar=0x7f080068;
         public static final int buyButton=0x7f08000a;
         public static final int buy_now=0x7f08000f;
         public static final int buy_with_google=0x7f08000e;
         public static final int checkbox=0x7f08003c;
         public static final int classic=0x7f080011;
         public static final int collapseActionView=0x7f080020;
-        public static final int contact_us_button=0x7f080068;
+        public static final int contact_us_button=0x7f08006d;
         public static final int container=0x7f080053;
         public static final int decor_content_parent=0x7f080042;
         public static final int default_activity_button=0x7f080037;
@@ -2066,10 +2066,12 @@ containing a value of this type.
         public static final int drawer_layout=0x7f080052;
         public static final int dropdown=0x7f080022;
         public static final int edit_query=0x7f080046;
+        public static final int email=0x7f080066;
         public static final int end=0x7f080025;
         public static final int enter_address=0x7f080058;
         public static final int expand_activities_button=0x7f080035;
         public static final int expanded_menu=0x7f08003b;
+        public static final int facebook=0x7f080062;
         public static final int grayscale=0x7f080012;
         public static final int holo_dark=0x7f080005;
         public static final int holo_light=0x7f080006;
@@ -2083,7 +2085,7 @@ containing a value of this type.
         public static final int list_item=0x7f080038;
         public static final int loc_description=0x7f08005f;
         public static final int loc_description_text=0x7f08005e;
-        public static final int mapview=0x7f080062;
+        public static final int mapview=0x7f080067;
         public static final int mapview2=0x7f08005b;
         public static final int match_parent=0x7f08000c;
         public static final int middle=0x7f080024;
@@ -2094,8 +2096,9 @@ containing a value of this type.
         public static final int never=0x7f08001c;
         public static final int none=0x7f080000;
         public static final int normal=0x7f080001;
-        public static final int online_store_button=0x7f080067;
-        public static final int privacy_policy_button=0x7f080069;
+        public static final int online_store_button=0x7f08006c;
+        public static final int pinterest=0x7f080065;
+        public static final int privacy_policy_button=0x7f08006e;
         public static final int production=0x7f080007;
         public static final int progress_circular=0x7f08002f;
         public static final int progress_horizontal=0x7f080030;
@@ -2126,6 +2129,7 @@ containing a value of this type.
         public static final int terrain=0x7f080003;
         public static final int title=0x7f08003a;
         public static final int top=0x7f080026;
+        public static final int twitter=0x7f080063;
         public static final int up=0x7f080029;
         public static final int upload_image_button=0x7f080060;
         public static final int useLogo=0x7f080016;
@@ -2133,6 +2137,7 @@ containing a value of this type.
         public static final int user_inaddress=0x7f080059;
         public static final int withText=0x7f08001f;
         public static final int wrap_content=0x7f08000d;
+        public static final int youtube=0x7f080064;
     }
     public static final class integer {
         /**  The maximum number of action buttons that should be permitted within
@@ -2187,9 +2192,10 @@ containing a value of this type.
         public static final int activity_home=0x7f030017;
         public static final int fragment_add_droplet=0x7f030018;
         public static final int fragment_confirm=0x7f030019;
-        public static final int fragment_home=0x7f03001a;
-        public static final int fragment_navigation_drawer=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int fragment_contact_us=0x7f03001a;
+        public static final int fragment_home=0x7f03001b;
+        public static final int fragment_navigation_drawer=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
     }
     public static final class menu {
         public static final int global=0x7f0c0000;
