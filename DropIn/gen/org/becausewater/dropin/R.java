@@ -1693,19 +1693,19 @@ containing a value of this type.
         public static final int abc_config_showMenuShortcutsWhenKeyboardPresent=0x7f0a0003;
     }
     public static final class color {
-        public static final int abc_background_cache_hint_selector_material_dark=0x7f070048;
-        public static final int abc_background_cache_hint_selector_material_light=0x7f070049;
+        public static final int abc_background_cache_hint_selector_material_dark=0x7f070049;
+        public static final int abc_background_cache_hint_selector_material_light=0x7f07004a;
         public static final int abc_input_method_navigation_guard=0x7f07001a;
-        public static final int abc_primary_text_disable_only_material_dark=0x7f07004a;
-        public static final int abc_primary_text_disable_only_material_light=0x7f07004b;
-        public static final int abc_primary_text_material_dark=0x7f07004c;
-        public static final int abc_primary_text_material_light=0x7f07004d;
-        public static final int abc_search_url_text=0x7f07004e;
+        public static final int abc_primary_text_disable_only_material_dark=0x7f07004b;
+        public static final int abc_primary_text_disable_only_material_light=0x7f07004c;
+        public static final int abc_primary_text_material_dark=0x7f07004d;
+        public static final int abc_primary_text_material_light=0x7f07004e;
+        public static final int abc_search_url_text=0x7f07004f;
         public static final int abc_search_url_text_normal=0x7f070017;
         public static final int abc_search_url_text_pressed=0x7f070019;
         public static final int abc_search_url_text_selected=0x7f070018;
-        public static final int abc_secondary_text_material_dark=0x7f07004f;
-        public static final int abc_secondary_text_material_light=0x7f070050;
+        public static final int abc_secondary_text_material_dark=0x7f070050;
+        public static final int abc_secondary_text_material_light=0x7f070051;
         public static final int accent_material_dark=0x7f070026;
         public static final int accent_material_light=0x7f070025;
         public static final int background_floating_material_dark=0x7f07001d;
@@ -1736,8 +1736,8 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f070006;
         public static final int common_signin_btn_light_text_focused=0x7f070007;
         public static final int common_signin_btn_light_text_pressed=0x7f070005;
-        public static final int common_signin_btn_text_dark=0x7f070051;
-        public static final int common_signin_btn_text_light=0x7f070052;
+        public static final int common_signin_btn_text_dark=0x7f070052;
+        public static final int common_signin_btn_text_light=0x7f070053;
         public static final int dim_foreground_disabled_material_dark=0x7f070033;
         public static final int dim_foreground_disabled_material_light=0x7f070034;
         public static final int dim_foreground_material_dark=0x7f070031;
@@ -1757,6 +1757,7 @@ containing a value of this type.
         public static final int material_blue_grey_950=0x7f070047;
         public static final int material_deep_teal_200=0x7f070043;
         public static final int material_deep_teal_500=0x7f070044;
+        public static final int my_blue=0x7f070048;
         public static final int primary_dark_material_dark=0x7f070021;
         public static final int primary_dark_material_light=0x7f070022;
         public static final int primary_material_dark=0x7f07001f;
@@ -1795,8 +1796,8 @@ containing a value of this type.
         public static final int wallet_hint_foreground_holo_light=0x7f070011;
         public static final int wallet_holo_blue_light=0x7f070015;
         public static final int wallet_link_text_light=0x7f070016;
-        public static final int wallet_primary_text_holo_light=0x7f070053;
-        public static final int wallet_secondary_text_holo_dark=0x7f070054;
+        public static final int wallet_primary_text_holo_light=0x7f070054;
+        public static final int wallet_secondary_text_holo_dark=0x7f070055;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -2404,7 +2405,6 @@ containing a value of this type.
          */
         public static final int AppBaseTheme=0x7f0500f0;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0500f1;
         public static final int Base_TextAppearance_AppCompat=0x7f05009d;
@@ -2551,6 +2551,7 @@ containing a value of this type.
     
          */
         public static final int Base_Widget_AppCompat_Toolbar_Button_Navigation=0x7f050095;
+        public static final int MyActionBar=0x7f0500f2;
         public static final int Platform_AppCompat=0x7f0500ce;
         public static final int Platform_AppCompat_Dialog=0x7f0500d0;
         public static final int Platform_AppCompat_Light=0x7f0500cf;
