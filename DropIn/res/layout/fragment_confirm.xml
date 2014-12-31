@@ -70,11 +70,10 @@
     	    android:layout_below="@+id/loc_description"
     	    android:layout_marginTop="15dp"
     	    android:text="Upload an Image"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
-        	android:textAlignment="center"
-        	android:background="#FFFFFF" />
+        	android:background="@drawable/button_background" />
     	
     	<Button
     	    android:id="@+id/add_drop_button"
@@ -83,11 +82,10 @@
     	    android:layout_below="@+id/upload_image_button"
     	    android:layout_marginTop="5dp"
     	    android:text="Add Drop"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
-        	android:textAlignment="center"
-        	android:background="#FFFFFF" />
+        	android:background="@drawable/button_background" />
     
     </RelativeLayout>
     

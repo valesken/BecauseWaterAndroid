@@ -17,11 +17,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_because_water"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/nav_button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:gravity="left|center_vertical"
-        	android:background="#E9E9E9" />
+        	android:background="@drawable/nav_button_background" />
         
         <!-- This is just a line divider - graphical cake icing -->
         <View
@@ -34,11 +34,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_drop_in_app"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/nav_button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:gravity="left|center_vertical"
-        	android:background="#E9E9E9" />
+        	android:background="@drawable/nav_button_background" />
         
         <View
             android:layout_height="1dp"
@@ -50,11 +50,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/online_store"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/nav_button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:gravity="left|center_vertical"
-        	android:background="#E9E9E9" />
+        	android:background="@drawable/nav_button_background" />
         
         <View
             android:layout_height="1dp"
@@ -75,11 +75,11 @@
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:text="Contact Us"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/nav_button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:gravity="left|center_vertical"
-        	android:background="#E9E9E9" />
+        	android:background="@drawable/nav_button_background" />
         
         <View
             android:layout_height="1dp"
@@ -91,11 +91,11 @@
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:text="Privacy Policy"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/nav_button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:gravity="left|center_vertical"
-        	android:background="#E9E9E9" />
+        	android:background="@drawable/nav_button_background" />
         
         <View
             android:layout_height="1dp"

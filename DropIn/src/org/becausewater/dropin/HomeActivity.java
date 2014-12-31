@@ -40,8 +40,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 
-//public class HomeActivity extends ActionBarActivity
-//        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 public class HomeActivity extends ActionBarActivity {
 
     /**
@@ -54,9 +52,10 @@ public class HomeActivity extends ActionBarActivity {
      */
     private CharSequence mTitle;
     private static MapFragment map;
+    private static Contact_Fragment cf;
     private Context context;
-    private Intent launchBrowser;
     private Uri storeURL;
+    protected static Intent launchBrowser;
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
@@ -67,6 +66,8 @@ public class HomeActivity extends ActionBarActivity {
         context = this;
         fm = getSupportFragmentManager();
         map = new MapFragment();
+        cf = new Contact_Fragment();
+        
         if (savedInstanceState == null) {
             ft = fm.beginTransaction();
             ft.add(R.id.container, map)
@@ -119,7 +120,6 @@ public class HomeActivity extends ActionBarActivity {
         onlineStore.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO: Create link to online store with "Back" button leading back to this app
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
 				launchBrowser = new Intent(Intent.ACTION_VIEW, storeURL); 
 				startActivity(launchBrowser);
@@ -128,8 +128,11 @@ public class HomeActivity extends ActionBarActivity {
         contactUs.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO: Create form to send email to specified email address
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
+				ft = fm.beginTransaction();
+	            ft.add(R.id.container, cf)
+	        	  .addToBackStack("cf")
+	              .commit();
 			}
 		});
         privacyPolicy.setOnClickListener(new OnClickListener() {
@@ -186,8 +189,8 @@ public class HomeActivity extends ActionBarActivity {
     	map.toAdd(b);
     }
     
-    public static void addPin(double lat, double lon) {
-    	map.addPin(lat, lon);
+    public static void addPin(double lat, double lon, String title, String description) {
+    	map.addPin(lat, lon, title, description);
     }
     
     public static class MapFragment extends Fragment {
@@ -255,10 +258,11 @@ public class HomeActivity extends ActionBarActivity {
         	  .commit();
         }
         
-        public void addPin(double lat, double lon) {
+        public void addPin(double lat, double lon, String title, String description) {
         	map.addMarker(new MarkerOptions()
         	   .position(new LatLng(lat, lon))
-        	   .title("test"));
+        	   .title(title))
+        	   .setSnippet(description);
         }
         
         @Override
@@ -282,10 +286,14 @@ public class HomeActivity extends ActionBarActivity {
     
     public static class Add_Fragment extends Fragment {
     	
+    	private View rootView;
     	private double longitude, latitude;
     	private String result;
         private Context context;
         private EditText enter_address;
+        private List<Address> addresses;
+        private Address address;
+        private Geocoder geocoder;
     	
     	public Add_Fragment() {
     		latitude = 0;
@@ -299,14 +307,44 @@ public class HomeActivity extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
-            List<Address> addresses;
+            rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
             context = rootView.getContext();
+            setToCurrentLoc();
+            
+            Button submit = (Button) rootView.findViewById(R.id.submit_button);
+            Button useMyLoc = (Button) rootView.findViewById(R.id.use_my_loc_button);
+            
+            submit.setOnClickListener(new OnClickListener() {
+            	@Override
+            	public void onClick(View v) {
+            		if(enter_address.getText().toString().length() > 0) {
+            			ft = fm.beginTransaction();
+            			Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString());
+            			ft.add(R.id.container, cf)
+            			  .addToBackStack("cf")
+            			  .commit();
+            		}
+            		else {
+            			Toast.makeText(context, "Please enter an address", Toast.LENGTH_LONG)
+            				.show();
+            		}
+            	}
+            });
+            useMyLoc.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					setToCurrentLoc();
+				}
+			});
+            
+            return rootView;
+        }
 
-            // Convert longitude & latitude to address and change addr's text to the address
+        // Convert longitude & latitude to address and change addr's text to the address
+        private void setToCurrentLoc() {
+
             enter_address = (EditText) rootView.findViewById(R.id.user_inaddress);
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            Address address;
+            geocoder = new Geocoder(context, Locale.getDefault());
             result = "42 Bay State Rd, Boston, MA, 02215";
             try{
             	for(int i = 0; i < 10; ++i) {
@@ -327,26 +365,6 @@ public class HomeActivity extends ActionBarActivity {
             	e.printStackTrace();
             }
             enter_address.setText(result);
-            
-            Button submit = (Button) rootView.findViewById(R.id.submit_button);
-            submit.setOnClickListener(new OnClickListener() {
-            	@Override
-            	public void onClick(View v) {
-            		if(enter_address.getText().toString().length() > 0) {
-            			ft = fm.beginTransaction();
-            			Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString());
-            			ft.add(R.id.container, cf)
-            			  .addToBackStack("cf")
-            			  .commit();
-            		}
-            		else {
-            			Toast.makeText(context, "Please enter an address", Toast.LENGTH_LONG)
-            				.show();
-            		}
-            	}
-            });
-            
-            return rootView;
         }
     	
     }
@@ -356,6 +374,7 @@ public class HomeActivity extends ActionBarActivity {
     	private String result;
     	private Context context;
     	private double latitude, longitude;
+    	private EditText locationName, locationDescription;
     	MapView mapView2;
     	GoogleMap map;
     	LocationManager locationManager;
@@ -372,13 +391,6 @@ public class HomeActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_confirm, container, false);
             context = rootView.getContext();
-            
-            /*EditText addressLine = (EditText) rootView.findViewById(R.id.address);
-            EditText city = (EditText) rootView.findViewById(R.id.city);
-            EditText state = (EditText) rootView.findViewById(R.id.state);
-            EditText zipcode = (EditText) rootView.findViewById(R.id.zipcode);
-            EditText lat = (EditText) rootView.findViewById(R.id.latitude);
-            EditText lon = (EditText) rootView.findViewById(R.id.longitude);*/
             
             mapView2 = (MapView) rootView.findViewById(R.id.mapview2);
             mapView2.onCreate(savedInstanceState);
@@ -423,13 +435,15 @@ public class HomeActivity extends ActionBarActivity {
 				.build();
         	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
             
+        	locationName = (EditText) rootView.findViewById(R.id.name_of_location);
+        	locationDescription = (EditText) rootView.findViewById(R.id.loc_description);
             Button confirm = (Button) rootView.findViewById(R.id.add_drop_button);
             confirm.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					fm.popBackStack();
 					fm.popBackStack();
-					addPin(latitude, longitude);
+					addPin(latitude, longitude, locationName.getText().toString(), locationDescription.getText().toString());
 				}
 			});
             
@@ -453,5 +467,76 @@ public class HomeActivity extends ActionBarActivity {
         	super.onLowMemory();
         	mapView2.onLowMemory();
         }
+    }
+
+    public static class Contact_Fragment extends Fragment {
+    	
+    	View rootView;
+    	Uri facebookURL, twitterURL, youtubeURL, pinterestURL;
+    	
+    	public Contact_Fragment () {
+    	}
+    	
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    		rootView = inflater.inflate(R.layout.fragment_contact_us, container, false);
+    		
+    		Button facebook = (Button) rootView.findViewById(R.id.facebook_button); 
+    		facebookURL = Uri.parse("https://www.facebook.com/BeCauseWater");
+    		Button twitter = (Button) rootView.findViewById(R.id.twitter_button);
+    		twitterURL = Uri.parse("https://www.twitter.com/BeCauseWater");
+    		Button youtube = (Button) rootView.findViewById(R.id.youtube_button);
+    		youtubeURL = Uri.parse("https://www.youtube.com/becausewater");
+    		Button pinterest = (Button) rootView.findViewById(R.id.pinterest_button);
+    		pinterestURL = Uri.parse("http://www.pinterest.com/BeCauseWater");
+    		Button email = (Button) rootView.findViewById(R.id.email_button);
+    		
+    		facebook.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					launchBrowser = new Intent(Intent.ACTION_VIEW, facebookURL); 
+					getActivity().startActivity(launchBrowser);
+				}
+			});
+    		twitter.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					launchBrowser = new Intent(Intent.ACTION_VIEW, twitterURL); 
+					getActivity().startActivity(launchBrowser);
+				}
+			});
+    		youtube.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					launchBrowser = new Intent(Intent.ACTION_VIEW, youtubeURL); 
+					getActivity().startActivity(launchBrowser);
+				}
+			});
+    		pinterest.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					launchBrowser = new Intent(Intent.ACTION_VIEW, pinterestURL); 
+					getActivity().startActivity(launchBrowser);
+				}
+			});
+    		email.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// Info@BeCauseWater.com
+					Intent i = new Intent(Intent.ACTION_SEND);
+					i.setType("message/rfc822");
+					i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"jeff.valesken@gmail.com"});
+					i.putExtra(Intent.EXTRA_SUBJECT, "Test subject");
+					i.putExtra(Intent.EXTRA_TEXT   , "Test body");
+					try {
+					    startActivity(Intent.createChooser(i, "Send mail..."));
+					} catch (android.content.ActivityNotFoundException ex) {
+					    Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+    		
+    		
+    		return rootView;
+    	}
     }
 }

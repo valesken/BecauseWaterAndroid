@@ -28,10 +28,10 @@
 			android:layout_below="@+id/add_a_drop_text"
         	android:text="Use My Location"
         	android:textSize="18sp"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/button_text"
         	android:textAllCaps="false"
         	android:textAlignment="center"
-        	android:background="#FFFFFF" />
+        	android:background="@drawable/button_background" />
 
 		<!-- Enter An Address TextView -->
 		
@@ -74,11 +74,11 @@
         	android:layout_below="@+id/user_inaddress"
 			android:layout_margin="1dp"
         	android:text="Submit"
-        	android:textColor="#0088FF"
+        	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
         	android:textAlignment="center"
-        	android:background="#FFFFFF" />
+        	android:background="@drawable/button_background" />
 		
 		<TextView
 		    android:layout_width="fill_parent"
