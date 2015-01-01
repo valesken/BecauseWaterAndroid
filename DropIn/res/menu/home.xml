@@ -1,7 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="org.becausewater.dropin.HomeActivity" >
 
+    <item
+        android:id="@+id/add_new"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="ifRoom"
+        android:title="Add New Drop" />
+    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

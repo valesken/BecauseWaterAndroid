@@ -20,7 +20,12 @@
     </style>
     
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
-    	<item name="background">@color/my_blue</item>
+        <item name="android:background">@color/my_translucent_gray</item>
+    	<item name="android:windowActionBarOverlay">true</item>
+        
+        <!-- Support Library Compatibility -->
+    	<item name="background">@color/my_translucent_gray</item>
+    	<item name="windowActionBarOverlay">true</item>
     </style>
 
 </resources>

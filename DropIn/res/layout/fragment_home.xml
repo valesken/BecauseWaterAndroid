@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
         
-        <Button
+        <!-- <Button
             android:id="@+id/add_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:onClick="toAdd"
             android:text="add"
             android:textColor="#0088FF"
-            android:textAllCaps="false" />
+            android:textAllCaps="false" /> -->
         
     </RelativeLayout>
 

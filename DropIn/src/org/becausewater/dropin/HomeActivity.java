@@ -19,12 +19,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,10 +34,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
@@ -56,12 +60,14 @@ public class HomeActivity extends ActionBarActivity {
     private Context context;
     private Uri storeURL;
     protected static Intent launchBrowser;
+    protected static Menu mMenu;
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_home);
         context = this;
         fm = getSupportFragmentManager();
@@ -77,7 +83,7 @@ public class HomeActivity extends ActionBarActivity {
         mNavDrawerFragment = (NavDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        
         // Set up the drawer.
         mNavDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 
@@ -129,10 +135,12 @@ public class HomeActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				ft = fm.beginTransaction();
-	            ft.add(R.id.container, cf)
-	        	  .addToBackStack("cf")
-	              .commit();
+				if(fm.getBackStackEntryCount() == 0 || fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName() != "cf") {
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, cf)
+					  .addToBackStack("cf")
+					  .commit();
+				}
 			}
 		});
         privacyPolicy.setOnClickListener(new OnClickListener() {
@@ -161,16 +169,20 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        mMenu = menu;
         if (!mNavDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.home, menu);
+            getMenuInflater().inflate(R.menu.home, mMenu);
             restoreActionBar();
+            if(fm.getBackStackEntryCount() > 0)
+            	mMenu.findItem(R.id.add_new).setVisible(false);
+            else
+            	mMenu.findItem(R.id.add_new).setVisible(true);
             return true;
         }
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(mMenu);
     }
 
     @Override
@@ -179,14 +191,22 @@ public class HomeActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.add_new) {
+        	map.toAdd();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
     
-    public void toAdd(View b) {
-    	map.toAdd(b);
+    @Override
+    public void onBackPressed() {
+    	if(fm.getBackStackEntryCount() == 1) {
+            if(mMenu != null)
+            	mMenu.findItem(R.id.add_new).setVisible(true);
+            fm.popBackStack();
+    	}
+    	else
+    		super.onBackPressed();
     }
     
     public static void addPin(double lat, double lon, String title, String description) {
@@ -217,7 +237,10 @@ public class HomeActivity extends ActionBarActivity {
             map = mapView.getMap();
             MapsInitializer.initialize(mapView.getContext());
             map.setMyLocationEnabled(true);
-            //LocationManager locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
+
+            int actionBarSize = getActionBarHeight();
+            map.setPadding(0, actionBarSize, 0, 0);
+            
             locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
             map.getUiSettings().setZoomControlsEnabled(true);
             
@@ -246,8 +269,7 @@ public class HomeActivity extends ActionBarActivity {
             return rootView;
         }
         
-        // Testing
-        public void toAdd(View b) {
+        public void toAdd() {
         	Location myLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         	latitude = myLoc.getLatitude();
         	longitude = myLoc.getLongitude();
@@ -263,6 +285,16 @@ public class HomeActivity extends ActionBarActivity {
         	   .position(new LatLng(lat, lon))
         	   .title(title))
         	   .setSnippet(description);
+        }
+        
+        private int getActionBarHeight(){
+        	int[] textSizeAttr = new int[] { android.R.attr.actionBarSize };
+            TypedValue typedValue = new TypedValue(); 
+            TypedArray a = rootView.getContext().obtainStyledAttributes(typedValue.data, textSizeAttr);
+            int textSize = a.getDimensionPixelSize(0, -1);
+            a.recycle();
+        	
+        	return (textSize+5);
         }
         
         @Override
@@ -310,6 +342,8 @@ public class HomeActivity extends ActionBarActivity {
             rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
             context = rootView.getContext();
             setToCurrentLoc();
+            if(mMenu != null)
+            	mMenu.findItem(R.id.add_new).setVisible(false);
             
             Button submit = (Button) rootView.findViewById(R.id.submit_button);
             Button useMyLoc = (Button) rootView.findViewById(R.id.use_my_loc_button);
@@ -443,6 +477,8 @@ public class HomeActivity extends ActionBarActivity {
 				public void onClick(View v) {
 					fm.popBackStack();
 					fm.popBackStack();
+		            if(mMenu != null)
+		            	mMenu.findItem(R.id.add_new).setVisible(true);
 					addPin(latitude, longitude, locationName.getText().toString(), locationDescription.getText().toString());
 				}
 			});
