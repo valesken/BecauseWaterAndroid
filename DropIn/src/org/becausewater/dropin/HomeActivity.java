@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -39,9 +40,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -59,6 +60,7 @@ public class HomeActivity extends ActionBarActivity {
     private static Contact_Fragment cf;
     private Context context;
     private Uri storeURL;
+	private boolean isDrawerOpen = false;
     protected static Intent launchBrowser;
     protected static Menu mMenu;
     public static FragmentManager fm;
@@ -83,9 +85,36 @@ public class HomeActivity extends ActionBarActivity {
         mNavDrawerFragment = (NavDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBar actionBar = getSupportActionBar();
         
         // Set up the drawer.
         mNavDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+        
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        	public void onDrawerClosed(View view) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.my_translucent_gray)));
+        		invalidateOptionsMenu();
+        	}
+        	
+        	public void onDrawerOpened(View drawerView) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.my_light_gray)));
+        		invalidateOptionsMenu();
+        	}
+        	
+        	public void onDrawerSlide(View drawerView, float slideOffset) {
+				if(slideOffset > .55 && !isDrawerOpen) {
+        			onDrawerOpened(drawerView);
+        			isDrawerOpen = true;
+        		}
+				else if(slideOffset < .45 && isDrawerOpen) {
+					onDrawerClosed(drawerView);
+					isDrawerOpen = false;
+				}
+				super.onDrawerSlide(drawerView, slideOffset);
+        	}
+        };
+        mDrawerToggle.syncState();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         Button aboutDropInApp = (Button) findViewById(R.id.about_drop_in_app_button);
         Button aboutBecauseWater = (Button) findViewById(R.id.about_because_water_button);
@@ -138,6 +167,7 @@ public class HomeActivity extends ActionBarActivity {
 				if(fm.getBackStackEntryCount() == 0 || fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName() != "cf") {
 					ft = fm.beginTransaction();
 					ft.add(R.id.container, cf)
+					  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
 					  .addToBackStack("cf")
 					  .commit();
 				}
@@ -161,7 +191,6 @@ public class HomeActivity extends ActionBarActivity {
     
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
@@ -276,6 +305,7 @@ public class HomeActivity extends ActionBarActivity {
         	ft = fm.beginTransaction();
         	Add_Fragment af = new Add_Fragment(latitude, longitude);
         	ft.add(R.id.container, af)
+			  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         	  .addToBackStack("af")
         	  .commit();
         }
@@ -355,6 +385,7 @@ public class HomeActivity extends ActionBarActivity {
             			ft = fm.beginTransaction();
             			Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString());
             			ft.add(R.id.container, cf)
+          			  	  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             			  .addToBackStack("cf")
             			  .commit();
             		}
