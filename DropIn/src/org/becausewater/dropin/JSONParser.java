@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+
 public class JSONParser {
 	
 	private String urlString, data = "";
@@ -40,7 +41,7 @@ public class JSONParser {
 							
 					InputStream stream = entity.getContent();
 					Scanner s = new Scanner(stream);
-					s.useDelimiter("<br/>|<br />|&nbsp;");
+					s.useDelimiter("\\n");
 					while(s.hasNext())
 						data = data.concat(s.next());
 					readAndParseJSON(data);
@@ -75,6 +76,7 @@ public class JSONParser {
 					drop = new Drop();
 					drop.setLatitude(obj.getDouble("lat"));
 					drop.setLongitude(obj.getDouble("lng"));
+					drop.setAddress(obj.getString("address"));
 					drop.setName(obj.getString("name"));
 					drop.setDetails(obj.getString("details"));
 					drop.setCategory(obj.getString("category"));

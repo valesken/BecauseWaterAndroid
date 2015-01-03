@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
+    android:background="@color/my_white" >
+    
+    <TextView
+        android:id="@+id/drop_info_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+    	android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Drop In Info"
+        android:textSize="25sp"
+        android:textColor="@color/abc_primary_text_material_light"
+        android:textStyle="bold" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/drop_info_title"
+    	android:paddingLeft="20dp"
+        android:orientation="vertical" >
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textColor="@color/my_blue" />
+        
+        <TextView
+            android:id="@+id/drop_info_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingBottom="15dp"
+            android:text="" />
+    	
+    	<TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="Description"
+            android:textColor="@color/my_blue" />
+    	
+    	<TextView
+    	    android:id="@+id/drop_info_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingBottom="15dp"
+            android:text="" />
+        
+        <!-- a line divider -->
+    	<View
+        	android:layout_height="1dp"
+        	android:layout_width="fill_parent"
+        	android:background="@color/my_line_divider_gray" />
+    	
+    	<LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            
+            <Button 
+                android:id="@+id/drop_info_to_here"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="Directions to Here"
+        		android:textColor="@drawable/button_text"
+        		android:textAllCaps="false"
+        		android:background="@drawable/button_background"  />
+            
+            <Button 
+                android:id="@+id/drop_info_from_here"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="Directions from Here"
+        		android:textColor="@drawable/button_text"
+        		android:textAllCaps="false"
+        		android:background="@drawable/button_background" />
+            
+        </LinearLayout>
+    	
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+    	android:paddingLeft="20dp"
+        android:paddingBottom="20dp"
+        android:orientation="vertical" >
+        
+    	<Button
+    	    android:id="@+id/report_a_problem"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="Report a Problem"
+        	android:textColor="@drawable/button_text"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:background="@drawable/button_background" />
+    
+    	<!-- a line divider -->
+    	<View
+        	android:layout_height="1dp"
+        	android:layout_width="fill_parent"
+        	android:background="@color/my_line_divider_gray" />
+    </LinearLayout>
+
+</RelativeLayout>

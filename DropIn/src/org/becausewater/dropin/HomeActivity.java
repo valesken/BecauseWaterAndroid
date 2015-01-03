@@ -2,11 +2,13 @@ package org.becausewater.dropin;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,6 +43,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -253,6 +256,8 @@ public class HomeActivity extends ActionBarActivity {
     	private double latitude = 42.3581, longitude = -71.0636;
     	private View rootView;
 		private ArrayList<Drop> drops;
+		private HashMap<Marker, Drop> dropMap;
+        private Info_Fragment info;
     	
         public MapFragment() {
         }
@@ -262,6 +267,7 @@ public class HomeActivity extends ActionBarActivity {
             rootView = inflater.inflate(R.layout.fragment_home, container, false);
             LatLng myLatLng;
             CameraPosition myPosition;
+            dropMap = new HashMap<Marker, Drop>();
         	
             // get MapView from layout
             mapView = (MapView) rootView.findViewById(R.id.mapview);
@@ -294,6 +300,18 @@ public class HomeActivity extends ActionBarActivity {
             queryDatabase();
             for(int i = 0; i < drops.size(); ++i)
             	addPin(drops.get(i));
+        	
+        	map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+				@Override
+				public void onInfoWindowClick(Marker marker) {
+					info = new Info_Fragment(dropMap.get(marker));
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, info)
+					  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					  .addToBackStack("info")
+					  .commit();
+				}
+			});
             
             return rootView;
         }
@@ -330,14 +348,16 @@ public class HomeActivity extends ActionBarActivity {
         public void addPin(Drop drop) {
         	Marker marker = map.addMarker(new MarkerOptions()
         		.position(new LatLng(drop.getLatitude(), drop.getLongitude()))
-         	   .title(drop.getName())
-         	   .snippet(drop.getDetails()));
+        		.title(drop.getName())
+        		.snippet(drop.getDetails()));
         	if(drop.getCategory().equals("Drop In"))
     			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker2_64));
     		else if(drop.getCategory().equals("Public Fountain"))
     			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker3_55));
     		else
     			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55));
+        	
+        	dropMap.put(marker, drop); // Make drop accessible by unique LatLng
         }
         
         private int getActionBarHeight(){
@@ -573,6 +593,7 @@ public class HomeActivity extends ActionBarActivity {
     	public Contact_Fragment () {
     	}
     	
+    	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     		rootView = inflater.inflate(R.layout.fragment_contact_us, container, false);
     		
@@ -631,6 +652,58 @@ public class HomeActivity extends ActionBarActivity {
 				}
 			});
     		
+    		
+    		return rootView;
+    	}
+    }
+
+    public static class Info_Fragment extends Fragment {
+    	
+    	View rootView;
+    	private Drop drop;
+    	
+    	public Info_Fragment(Drop d) {
+    		this.drop = d;
+    	}
+    	
+    	@Override
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    		rootView = inflater.inflate(R.layout.fragment_drop_info, container, false);
+    		
+    		TextView dropTitle = (TextView) rootView.findViewById(R.id.drop_info_title);
+    		dropTitle.setText(drop.getName());
+    		TextView dropAddress = (TextView) rootView.findViewById(R.id.drop_info_address);
+    		dropAddress.setText(drop.getAddress());
+    		TextView dropDescription = (TextView) rootView.findViewById(R.id.drop_info_description);
+    		dropDescription.setText(drop.getDetails());
+    		
+    		Button report = (Button) rootView.findViewById(R.id.report_a_problem);
+    		Button toHere = (Button) rootView.findViewById(R.id.drop_info_to_here);
+    		Button fromHere = (Button) rootView.findViewById(R.id.drop_info_from_here);
+    		
+    		report.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, cf)
+					  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					  .addToBackStack("cf")
+					  .commit();
+				}
+			});
+    		
+    		toHere.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					
+				}
+			});
+    		fromHere.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					
+				}
+			});
     		
     		return rootView;
     	}
