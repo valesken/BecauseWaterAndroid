@@ -1,6 +1,7 @@
 package org.becausewater.dropin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -11,6 +12,11 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
@@ -244,11 +250,13 @@ public class HomeActivity extends ActionBarActivity {
     
     public static class MapFragment extends Fragment {
 
-    	MapView mapView;
-    	GoogleMap map;
-    	LocationManager locationManager;
-    	double latitude, longitude;
-    	View rootView;
+    	private MapView mapView;
+    	private GoogleMap map;
+    	private LocationManager locationManager;
+    	private double latitude = 42.3581, longitude = -71.0636;
+    	private View rootView;
+		private ArrayList<Double> lats, lngs;
+		private ArrayList<String> names, details;
     	
         public MapFragment() {
         }
@@ -275,27 +283,46 @@ public class HomeActivity extends ActionBarActivity {
             
             Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(myLocation != null) {
-            	myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            	myPosition = new CameraPosition.Builder()
-            		.target(myLatLng)
-            		.zoom(16)
-            		.bearing(0)
-            		.tilt(0)
-            		.build();
-            	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            	latitude = myLocation.getLatitude();
+            	longitude = myLocation.getLongitude();
             }
-            else {
-            	myLatLng = new LatLng(42.3581, -71.0636); // Boston
-            	myPosition = new CameraPosition.Builder()
-            		.target(myLatLng)
-            		.zoom(16)
-            		.bearing(0)
-            		.tilt(0)
-            		.build();
-            	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
-            }
+            myLatLng = new LatLng(latitude, longitude);
+        	myPosition = new CameraPosition.Builder()
+    			.target(myLatLng)
+    			.zoom(16)
+    			.bearing(0)
+    			.tilt(0)
+    			.build();
+        	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            
+            queryDatabase();
+            for(int i = 0; i < lats.size(); ++i)
+            	addPin(lats.get(i), lngs.get(i), names.get(i), details.get(i));
             
             return rootView;
+        }
+        
+        private void queryDatabase() {
+    		String url_part1 = "foobar";
+    		String url_part2 = "&lng=";
+    		String url_part3 = "&radius=10";
+    		String url = "".concat(url_part1)
+    				.concat(Double.toString(latitude))
+    				.concat(url_part2)
+    				.concat(Double.toString(longitude))
+    				.concat(url_part3);
+    		
+        	JSONParser jParser = new JSONParser(url);
+        	jParser.fetchJSON(); // Busy-waits in this method until the thread is complete
+        	
+        	lats = new ArrayList<Double>();
+        	lngs = new ArrayList<Double>();
+        	names = new ArrayList<String>();
+        	details = new ArrayList<String>();
+        	jParser.getLats(lats);
+        	jParser.getLngs(lngs);
+        	jParser.getNames(names);
+        	jParser.getDetails(details);
         }
         
         public void toAdd() {
