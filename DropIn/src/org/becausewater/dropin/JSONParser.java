@@ -16,7 +16,7 @@ public class JSONParser {
 	private String urlString, data = "";
 	private ArrayList<JSONObject> objs;
 	private ArrayList<Double> lats, lngs;
-	private ArrayList<String> names, details;
+	private ArrayList<String> names, details, categories;
 	
 	public JSONParser(String url) {
 		this.urlString = url;
@@ -25,6 +25,7 @@ public class JSONParser {
 		lngs = new ArrayList<Double>();
 		names = new ArrayList<String>();
 		details = new ArrayList<String>();
+		categories = new ArrayList<String>();
 	}
 	
 	public void getLats(ArrayList<Double> dest) {
@@ -45,6 +46,11 @@ public class JSONParser {
 	public void getDetails(ArrayList<String> dest) {
 		for(int i = 0; i < lngs.size(); ++i)
 			dest.add(details.get(i));
+	}
+	
+	public void getCategories(ArrayList<String> dest) {
+		for(int i = 0; i < lngs.size(); ++i)
+			dest.add(categories.get(i));
 	}
 	
 	public void fetchJSON() {
@@ -94,6 +100,7 @@ public class JSONParser {
 					lngs.add(obj.getDouble("lng"));
 					names.add(obj.getString("name"));
 					details.add(obj.getString("details"));
+					categories.add(obj.getString("category"));
 				}
 				else
 					break;
