@@ -15,42 +15,17 @@ public class JSONParser {
 	
 	private String urlString, data = "";
 	private ArrayList<JSONObject> objs;
-	private ArrayList<Double> lats, lngs;
-	private ArrayList<String> names, details, categories;
+	private ArrayList<Drop> drops;
 	
 	public JSONParser(String url) {
 		this.urlString = url;
 		objs = new ArrayList<JSONObject>();
-		lats = new ArrayList<Double>();
-		lngs = new ArrayList<Double>();
-		names = new ArrayList<String>();
-		details = new ArrayList<String>();
-		categories = new ArrayList<String>();
+		drops = new ArrayList<Drop>();
 	}
 	
-	public void getLats(ArrayList<Double> dest) {
-		for(int i = 0; i < lats.size(); ++i)
-			dest.add(lats.get(i));
-	}
-	
-	public void getLngs(ArrayList<Double> dest) {
-		for(int i = 0; i < lngs.size(); ++i)
-			dest.add(lngs.get(i));
-	}
-	
-	public void getNames(ArrayList<String> dest) {
-		for(int i = 0; i < lngs.size(); ++i)
-			dest.add(names.get(i));
-	}
-	
-	public void getDetails(ArrayList<String> dest) {
-		for(int i = 0; i < lngs.size(); ++i)
-			dest.add(details.get(i));
-	}
-	
-	public void getCategories(ArrayList<String> dest) {
-		for(int i = 0; i < lngs.size(); ++i)
-			dest.add(categories.get(i));
+	public void getDrops(ArrayList<Drop> dest) {
+		for(int i = 0; i < drops.size(); ++i)
+			dest.add(drops.get(i));
 	}
 	
 	public void fetchJSON() {
@@ -89,6 +64,7 @@ public class JSONParser {
 	public void readAndParseJSON(String in) {
 		String index = "";
 		JSONObject obj;
+		Drop drop;
 		try {
 			JSONObject reader = new JSONObject(in);
 			for(int i = 0; i < 30; ++i) {
@@ -96,11 +72,13 @@ public class JSONParser {
 				if(reader.has(index)) {
 					objs.add(reader.getJSONObject(index));
 					obj = objs.get(i);
-					lats.add(obj.getDouble("lat"));
-					lngs.add(obj.getDouble("lng"));
-					names.add(obj.getString("name"));
-					details.add(obj.getString("details"));
-					categories.add(obj.getString("category"));
+					drop = new Drop();
+					drop.setLatitude(obj.getDouble("lat"));
+					drop.setLongitude(obj.getDouble("lng"));
+					drop.setName(obj.getString("name"));
+					drop.setDetails(obj.getString("details"));
+					drop.setCategory(obj.getString("category"));
+					drops.add(drop);
 				}
 				else
 					break;

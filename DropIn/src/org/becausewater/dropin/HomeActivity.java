@@ -15,11 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -246,8 +241,8 @@ public class HomeActivity extends ActionBarActivity {
     		super.onBackPressed();
     }
     
-    public static void addPin(double lat, double lon, String title, String description, String category) {
-    	map.addPin(lat, lon, title, description, category);
+    public static void addPin(Drop drop) {
+    	map.addPin(drop);
     }
     
     public static class MapFragment extends Fragment {
@@ -257,8 +252,7 @@ public class HomeActivity extends ActionBarActivity {
     	private LocationManager locationManager;
     	private double latitude = 42.3581, longitude = -71.0636;
     	private View rootView;
-		private ArrayList<Double> lats, lngs;
-		private ArrayList<String> names, details, categories;
+		private ArrayList<Drop> drops;
     	
         public MapFragment() {
         }
@@ -298,8 +292,8 @@ public class HomeActivity extends ActionBarActivity {
         	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
             
             queryDatabase();
-            for(int i = 0; i < lats.size(); ++i)
-            	addPin(lats.get(i), lngs.get(i), names.get(i), details.get(i), categories.get(i));
+            for(int i = 0; i < drops.size(); ++i)
+            	addPin(drops.get(i));
             
             return rootView;
         }
@@ -317,16 +311,8 @@ public class HomeActivity extends ActionBarActivity {
         	JSONParser jParser = new JSONParser(url);
         	jParser.fetchJSON(); // Busy-waits in this method until the thread is complete
         	
-        	lats = new ArrayList<Double>();
-        	lngs = new ArrayList<Double>();
-        	names = new ArrayList<String>();
-        	details = new ArrayList<String>();
-        	categories = new ArrayList<String>();
-        	jParser.getLats(lats);
-        	jParser.getLngs(lngs);
-        	jParser.getNames(names);
-        	jParser.getDetails(details);
-        	jParser.getCategories(categories);
+        	drops = new ArrayList<Drop>();
+        	jParser.getDrops(drops);
         }
         
         public void toAdd() {
@@ -341,17 +327,17 @@ public class HomeActivity extends ActionBarActivity {
         	  .commit();
         }
         
-        public void addPin(double lat, double lon, String title, String description, String category) {
+        public void addPin(Drop drop) {
         	Marker marker = map.addMarker(new MarkerOptions()
-        	   .position(new LatLng(lat, lon))
-        	   .title(title)
-        	   .snippet(description));
-        	if(category.equals("Drop In"))
-        		marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker2_64));
-        	else if(category.equals("Public Fountain"))
-        		marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker3_55));
-        	else
-        		marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55));
+        		.position(new LatLng(drop.getLatitude(), drop.getLongitude()))
+         	   .title(drop.getName())
+         	   .snippet(drop.getDetails()));
+        	if(drop.getCategory().equals("Drop In"))
+    			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker2_64));
+    		else if(drop.getCategory().equals("Public Fountain"))
+    			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker3_55));
+    		else
+    			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55));
         }
         
         private int getActionBarHeight(){
@@ -547,7 +533,13 @@ public class HomeActivity extends ActionBarActivity {
 					fm.popBackStack();
 		            if(mMenu != null)
 		            	mMenu.findItem(R.id.add_new).setVisible(true);
-					addPin(latitude, longitude, locationName.getText().toString(), locationDescription.getText().toString(), "User Submitted");
+		            Drop drop = new Drop();
+		            drop.setLatitude(latitude);
+		            drop.setLongitude(longitude);
+		            drop.setName(locationName.getText().toString());
+		            drop.setDetails(locationDescription.getText().toString());
+		            drop.setCategory("User Submitted");
+		            addPin(drop);
 				}
 			});
             
