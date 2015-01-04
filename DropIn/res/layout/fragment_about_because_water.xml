@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:background="@color/my_white" >
+    
+    <ImageView
+        android:id="@+id/because_water_banner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bc_logo_transparent"
+        android:contentDescription="Because Water Logo" />
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    	android:scrollbars="vertical" >
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    		android:paddingLeft="20dp"
+    		android:paddingRight="20dp"
+    		android:orientation="vertical" >
+    		
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Vision"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="A water sustainable environment supported by a community of like-minded individuals who have connected over the beauty, power, and respect for water."
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="The Company"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="BeCause Water is a movement for water sustainability."
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="We use the power of community based initiative to accelerate the demand for water sustainable solutions."
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="We are legally registered as Benefit Corporation that operates under the Triple Bottom Line (People, Planet, Profit)."
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Current Focus"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+            <TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Changing the model in which water is consumed and perceived."
+        		android:textColor="@color/abc_primary_text_material_light" />
+            
+    	</LinearLayout>
+    </ScrollView>
+	
+
+</LinearLayout>

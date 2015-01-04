@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:background="@color/my_white" >
+    
+    
+    <ImageView
+        android:id="@+id/drop_in_banner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drop_in_banner"
+        android:contentDescription="Drop In Logo" />
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    	android:scrollbars="vertical" >
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    		android:paddingLeft="20dp"
+    		android:paddingRight="20dp"
+    		android:orientation="vertical" >
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Drop In is a shared resource program that helps you find, drink, and share water on the go."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="What's a drop?"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView 
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="We define a drop as either a public drinking fountain or business partner such as a coffee shop or cafe where you can access free, clean, and local water."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Feel welcomed in our community"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+    		    android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Our business partners expect you to Drop In at anytime during their business hours."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="How do I fill up?"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+    		    android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="The majority of our partners have an easily accessible water container. If not, simply go up to the counter and say you’re a Drop In member."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Forgot your bottle?"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="No worries. In most cases, our local business partners leave out cups for our Drop In members."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Unable to find water near you?"
+        		android:textStyle="bold"
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    		<TextView
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="5dp"
+        		android:text="Increase water access in your community by adding drinking fountains to our map with the &quot;Add Drop&quot; feature."
+        		android:textColor="@color/abc_primary_text_material_light" />
+    		
+    	</LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

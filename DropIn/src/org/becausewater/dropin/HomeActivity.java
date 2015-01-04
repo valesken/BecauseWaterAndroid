@@ -64,9 +64,11 @@ public class HomeActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private static MapFragment map;
     private static Contact_Fragment cf;
+    private static Simple_Fragment sf;
     private Context context;
     private Uri storeURL;
 	private boolean isDrawerOpen = false;
+    private String fragmentName = "";
     protected static Intent launchBrowser;
     protected static Menu mMenu;
     public static FragmentManager fm;
@@ -122,40 +124,44 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        Button aboutDropInApp = (Button) findViewById(R.id.about_drop_in_app_button);
         Button aboutBecauseWater = (Button) findViewById(R.id.about_because_water_button);
+        Button aboutDropInApp = (Button) findViewById(R.id.about_drop_in_app_button);
         Button onlineStore = (Button) findViewById(R.id.online_store_button);
         Button contactUs = (Button) findViewById(R.id.contact_us_button);
         Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
         
         storeURL = Uri.parse("http://becausewater.org/store-2/");
         
-        aboutDropInApp.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-	            new AlertDialog.Builder(context)
-	        		.setMessage(R.string.about_drop_in_app_content)
-	        		.setTitle(R.string.about_drop_in_app)
-	        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-	    				@Override
-	    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
-	    			})
-	        		.show();
-				mDrawerLayout.closeDrawer(Gravity.LEFT);
-			}
-		});
         aboutBecauseWater.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-	            new AlertDialog.Builder(context)
-	        		.setMessage(R.string.about_because_water_content)
-	        		.setTitle(R.string.about_because_water)
-	        		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-	    				@Override
-	    				public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
-	    			})
-	        		.show();
+				if(fm.getBackStackEntryCount() > 0)
+					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
+				sf = new Simple_Fragment(true);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
+				if(fragmentName == "info")
+					fm.popBackStack();
+				ft = fm.beginTransaction();
+				ft.add(R.id.container, sf)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					.addToBackStack("info")
+					.commit();
+			}
+		});
+        aboutDropInApp.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(fm.getBackStackEntryCount() > 0)
+					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
+				sf = new Simple_Fragment(false);
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+				if(fragmentName == "info") 
+					fm.popBackStack();
+				ft = fm.beginTransaction();
+				ft.add(R.id.container, sf)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					.addToBackStack("info")
+					.commit();
 			}
 		});
         onlineStore.setOnClickListener(new OnClickListener() {
@@ -169,14 +175,16 @@ public class HomeActivity extends ActionBarActivity {
         contactUs.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(fm.getBackStackEntryCount() > 0)
+					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				if(fm.getBackStackEntryCount() == 0 || fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName() != "cf") {
-					ft = fm.beginTransaction();
-					ft.add(R.id.container, cf)
-					  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-					  .addToBackStack("cf")
-					  .commit();
-				}
+				if(fragmentName == "info")
+					fm.popBackStack();
+				ft = fm.beginTransaction();
+				ft.add(R.id.container, cf)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					.addToBackStack("info")
+					.commit();
 			}
 		});
         privacyPolicy.setOnClickListener(new OnClickListener() {
@@ -235,6 +243,7 @@ public class HomeActivity extends ActionBarActivity {
     
     @Override
     public void onBackPressed() {
+    	fragmentName = "";
     	if(fm.getBackStackEntryCount() == 1) {
             if(mMenu != null)
             	mMenu.findItem(R.id.add_new).setVisible(true);
@@ -706,6 +715,25 @@ public class HomeActivity extends ActionBarActivity {
 			});
     		
     		return rootView;
+    	}
+    }
+
+    public static class Simple_Fragment extends Fragment {
+    	private View rootView;
+    	private boolean becauseWater;
+    	
+    	public Simple_Fragment(boolean bw) {
+    		this.becauseWater = bw;
+    	}
+    	
+    	@Override
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            if(becauseWater)
+            	rootView = inflater.inflate(R.layout.fragment_about_because_water, container, false);
+            else
+            	rootView = inflater.inflate(R.layout.fragment_about_drop_in, container, false);
+            
+            return rootView;
     	}
     }
 }
