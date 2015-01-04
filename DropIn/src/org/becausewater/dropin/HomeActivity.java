@@ -140,13 +140,15 @@ public class HomeActivity extends ActionBarActivity {
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
 				sf = new Simple_Fragment(true);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				if(fragmentName == "info")
-					fm.popBackStack();
-				ft = fm.beginTransaction();
-				ft.add(R.id.container, sf)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-					.addToBackStack("info")
-					.commit();
+				if(fragmentName != "infoBW") {
+					if(fragmentName == "infoDI" || fragmentName == "cf")
+						fm.popBackStack();
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, sf)
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+						.addToBackStack("infoBW")
+						.commit();
+				}
 			}
 		});
         aboutDropInApp.setOnClickListener(new OnClickListener() {
@@ -156,13 +158,15 @@ public class HomeActivity extends ActionBarActivity {
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
 				sf = new Simple_Fragment(false);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				if(fragmentName == "info") 
-					fm.popBackStack();
-				ft = fm.beginTransaction();
-				ft.add(R.id.container, sf)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-					.addToBackStack("info")
-					.commit();
+				if(fragmentName != "infoDI") {
+					if(fragmentName == "infoBW" || fragmentName == "cf") 
+						fm.popBackStack();
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, sf)
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+						.addToBackStack("infoDI")
+						.commit();
+				}
 			}
 		});
         onlineStore.setOnClickListener(new OnClickListener() {
@@ -179,13 +183,15 @@ public class HomeActivity extends ActionBarActivity {
 				if(fm.getBackStackEntryCount() > 0)
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				if(fragmentName == "info")
-					fm.popBackStack();
-				ft = fm.beginTransaction();
-				ft.add(R.id.container, cf)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-					.addToBackStack("info")
-					.commit();
+				if(fragmentName != "cf") {
+					if(fragmentName == "infoBW" || fragmentName == "infoDI")
+						fm.popBackStack();
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, cf)
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+						.addToBackStack("cf")
+						.commit();
+				}
 			}
 		});
         privacyPolicy.setOnClickListener(new OnClickListener() {
@@ -327,7 +333,7 @@ public class HomeActivity extends ActionBarActivity {
         }
         
         private void queryDatabase() {
-    		String url_part1 = "foobar";
+    		String url_part1 = "http://dropinapp.org/apiv2/?api=7yEgyaKqGTEyX7wqtGHwX&action=get&lat=";
     		String url_part2 = "&lng=";
     		String url_part3 = "&radius=10";
     		String url = "".concat(url_part1)

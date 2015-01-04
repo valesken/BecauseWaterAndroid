@@ -6,23 +6,23 @@
     android:background="@color/my_white" >
         
     <TextView
+        android:id="@+id/contact_us_title"
        	android:layout_width="wrap_content"
        	android:layout_height="wrap_content"
        	android:layout_centerHorizontal="true"
-       	android:layout_above="@+id/social_buttons"
-       	android:paddingTop="10dp"
-       	android:paddingButtom="20dp"
+       	android:paddingTop="20dp"
+       	android:paddingBottom="20dp"
        	android:text="Contact Us"
        	android:textSize="25sp"
        	android:textColor="@color/abc_primary_text_material_light"
        	android:textStyle="bold" />
     
     <LinearLayout
-        android:id="@+id/social_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_below="@+id/contact_us_title"
+        android:layout_centerHorizontal="true">
         
         <LinearLayout
             android:layout_width="fill_parent"
@@ -45,6 +45,7 @@
         		android:textColor="@drawable/button_text"
         		android:textSize="18sp"
         		android:textAllCaps="false"
+        		android:gravity="left|center_vertical"
         		android:background="@drawable/button_background" />
     	</LinearLayout>
     
@@ -71,6 +72,7 @@
         		android:textColor="@drawable/button_text"
         		android:textSize="18sp"
         		android:textAllCaps="false"
+        		android:gravity="left|center_vertical"
         		android:background="@drawable/button_background" />
     		
     	</LinearLayout>
@@ -98,6 +100,7 @@
         		android:textColor="@drawable/button_text"
         		android:textSize="18sp"
         		android:textAllCaps="false"
+        		android:gravity="left|center_vertical"
         		android:background="@drawable/button_background" />
     	
 	    </LinearLayout>
@@ -125,6 +128,7 @@
         		android:textColor="@drawable/button_text"
         		android:textSize="18sp"
         		android:textAllCaps="false"
+        		android:gravity="left|center_vertical"
         		android:background="@drawable/button_background" />
 		    
     	</LinearLayout>
@@ -152,6 +156,7 @@
         		android:textColor="@drawable/button_text"
         		android:textSize="18sp"
         		android:textAllCaps="false"
+        		android:gravity="left|center_vertical"
         		android:background="@drawable/button_background" />
     		
     	</LinearLayout>
