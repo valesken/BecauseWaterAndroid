@@ -1,6 +1,8 @@
 package org.becausewater.dropin;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +58,7 @@ public class HomeActivity extends ActionBarActivity {
 
 	/*
 	 * Member variables declared here. For the most part, they need to be here in order to be referenced in multiple
-	 * functions and to be used in event listeners while maintaining dynamic allocation. 
+	 * functions and fragments and to be used in event listeners while maintaining dynamic allocation. 
 	 */
 	
     private NavDrawerFragment mNavDrawerFragment; // Managed behaviors, interactions, and presentation of the nav drawer
@@ -67,6 +69,7 @@ public class HomeActivity extends ActionBarActivity {
     private Uri storeURL;
 	private boolean isDrawerOpen = false;
     private String fragmentName = "";
+    private static JSONParser jParser;
     protected static Intent launchBrowser;
     protected static Menu mMenu;
     public static FragmentManager fm;
@@ -379,7 +382,7 @@ public class HomeActivity extends ActionBarActivity {
     				.concat(url_part3);
     		
     		// Get query results
-        	JSONParser jParser = new JSONParser(url);
+        	jParser = new JSONParser(url);
         	jParser.fetchJSON(); // Busy-waits in this method until the thread is complete
         	
         	drops = new ArrayList<Drop>();
@@ -411,7 +414,7 @@ public class HomeActivity extends ActionBarActivity {
     			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55));
         	
         	drop.setMarker(marker);
-        	dropMap.put(marker, drop); // Make drop accessible by unique LatLng
+        	dropMap.put(marker, drop); // Make drop accessible by unique Marker
         }
         
         private int getActionBarHeight(){
@@ -533,20 +536,23 @@ public class HomeActivity extends ActionBarActivity {
     
     public static class Confirm_Fragment extends Fragment {
     	
-    	private String result;
+    	private String address_string, url_string;
     	private Context context;
     	private double latitude, longitude;
     	private EditText locationName, locationDescription;
+    	private URLEncoder urlEncoder;
     	MapView mapView2;
     	GoogleMap map;
     	LocationManager locationManager;
     	
     	public Confirm_Fragment() {
-    		result = "";
+    		address_string = "";
+    		url_string = "";
     	}
     	
     	public Confirm_Fragment(String r) {
-    		result = r;
+    		address_string = r;
+    		url_string = "";
     	}
     	
     	@Override
@@ -566,21 +572,11 @@ public class HomeActivity extends ActionBarActivity {
             List<Address> addressList;
             Address address = null;
             try {
-            	addressList = geo.getFromLocationName(result,5);
+            	addressList = geo.getFromLocationName(address_string,5);
             	if(addressList != null) {
             		address = addressList.get(0);
-            		/*if(address.getMaxAddressLineIndex() > 0)
-            			addressLine.setText(address.getAddressLine(0));
-            		if(address.getLocality() != null )
-            			city.setText(address.getLocality());
-            		if(address.getAdminArea() != null)
-            			state.setText(address.getAdminArea());
-            		if(address.getPostalCode() != null)
-            			zipcode.setText(address.getPostalCode());*/
             		latitude = address.getLatitude();
             		longitude = address.getLongitude();
-            		/*lat.setText(Double.toString(latitude));
-            		lon.setText(Double.toString(longitude));*/
             	}
             }
             catch(IOException e) {
@@ -588,6 +584,7 @@ public class HomeActivity extends ActionBarActivity {
             }
             
         	map.addMarker(new MarkerOptions()
+        		.icon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55))
     			.position(new LatLng(latitude, longitude)));
         	CameraPosition myPosition = new CameraPosition.Builder()
 				.target(new LatLng(latitude, longitude))
@@ -613,7 +610,26 @@ public class HomeActivity extends ActionBarActivity {
 		            drop.setName(locationName.getText().toString());
 		            drop.setDetails(locationDescription.getText().toString());
 		            drop.setCategory("User Submitted");
-		            addPin(drop);
+		            drop.setAddress(address_string);
+		            //addPin(drop);
+		            try {
+		            url_string = url_string.concat("foobar")
+		            		.concat(urlEncoder.encode(Double.toString(latitude), "UTF-8"))
+		            		.concat("&lng=")
+		            		.concat(urlEncoder.encode(Double.toString(longitude), "UTF-8"))
+		            		.concat("&name=")
+		            		.concat(urlEncoder.encode(drop.getName(), "UTF-8"))
+		            		.concat("&address=")
+		            		.concat(urlEncoder.encode(drop.getAddress(), "UTF-8"))
+		            		.concat("&category=")
+		            		.concat(urlEncoder.encode(Integer.toString(3), "UTF-8"))
+		            		.concat("&details=")
+		            		.concat(urlEncoder.encode(drop.getDetails(), "UTF-8"));
+		            }
+		            catch (UnsupportedEncodingException e) {
+		            	e.printStackTrace();
+		            }
+		            jParser.pushDrop(url_string);
 				}
 			});
             

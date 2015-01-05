@@ -1,11 +1,13 @@
 package org.becausewater.dropin;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -89,5 +91,23 @@ public class JSONParser {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void pushDrop(final String url) {
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpPost httppost = new HttpPost(url);
+				try {
+					httpclient.execute(httppost);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 	}
 }
