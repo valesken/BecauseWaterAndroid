@@ -27,6 +27,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/drop_in_launcher"
+        android:logo="@drawable/drop_in"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity

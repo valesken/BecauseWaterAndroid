@@ -1,5 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/add_new"
+        android:icon="@drawable/ic_action_blank"
+        app:showAsAction="ifRoom"
+        android:enabled="false"
+        android:title="Add New Drop" />
 
     <item
         android:id="@+id/action_settings"

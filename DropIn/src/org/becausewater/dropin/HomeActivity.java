@@ -37,7 +37,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -48,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 
@@ -62,7 +62,6 @@ public class HomeActivity extends ActionBarActivity {
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
     private static MapFragment map;
     private static Contact_Fragment cf;
     private static Simple_Fragment sf;
@@ -92,7 +91,6 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         mNavDrawerFragment = (NavDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
         final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBar actionBar = getSupportActionBar();
         
@@ -102,11 +100,13 @@ public class HomeActivity extends ActionBarActivity {
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
         	public void onDrawerClosed(View view) {
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.my_translucent_gray)));
+                setDrawerIndicatorEnabled(true);
         		invalidateOptionsMenu();
         	}
         	
         	public void onDrawerOpened(View drawerView) {
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.my_light_gray)));
+                setDrawerIndicatorEnabled(false);
         		invalidateOptionsMenu();
         	}
         	
@@ -212,8 +212,15 @@ public class HomeActivity extends ActionBarActivity {
     
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
+        
+        LayoutParams layout = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.action_bar_layout, null);
+        actionBar.setCustomView(v, layout);
     }
 
 
@@ -227,9 +234,9 @@ public class HomeActivity extends ActionBarActivity {
             getMenuInflater().inflate(R.menu.home, mMenu);
             restoreActionBar();
             if(fm.getBackStackEntryCount() > 0)
-            	mMenu.findItem(R.id.add_new).setVisible(false);
+            	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_blank).setEnabled(false);
             else
-            	mMenu.findItem(R.id.add_new).setVisible(true);
+            	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_add).setEnabled(true);
             return true;
         }
         return super.onCreateOptionsMenu(mMenu);
@@ -253,7 +260,7 @@ public class HomeActivity extends ActionBarActivity {
     	fragmentName = "";
     	if(fm.getBackStackEntryCount() == 1) {
             if(mMenu != null)
-            	mMenu.findItem(R.id.add_new).setVisible(true);
+            	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_add).setEnabled(true);
             fm.popBackStack();
     	}
     	else
@@ -333,7 +340,7 @@ public class HomeActivity extends ActionBarActivity {
         }
         
         private void queryDatabase() {
-    		String url_part1 = "http://dropinapp.org/apiv2/?api=7yEgyaKqGTEyX7wqtGHwX&action=get&lat=";
+    		String url_part1 = "foobar";
     		String url_part2 = "&lng=";
     		String url_part3 = "&radius=10";
     		String url = "".concat(url_part1)
@@ -432,7 +439,7 @@ public class HomeActivity extends ActionBarActivity {
             context = rootView.getContext();
             setToCurrentLoc();
             if(mMenu != null)
-            	mMenu.findItem(R.id.add_new).setVisible(false);
+            	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_blank).setEnabled(false);
             
             Button submit = (Button) rootView.findViewById(R.id.submit_button);
             Button useMyLoc = (Button) rootView.findViewById(R.id.use_my_loc_button);
@@ -568,7 +575,7 @@ public class HomeActivity extends ActionBarActivity {
 					fm.popBackStack();
 					fm.popBackStack();
 		            if(mMenu != null)
-		            	mMenu.findItem(R.id.add_new).setVisible(true);
+		            	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_add).setEnabled(true);
 		            Drop drop = new Drop();
 		            drop.setLatitude(latitude);
 		            drop.setLongitude(longitude);
