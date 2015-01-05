@@ -2049,8 +2049,8 @@ containing a value of this type.
         public static final int youtube_unclicked_64=0x7f020066;
     }
     public static final class id {
-        public static final int about_because_water_button=0x7f080077;
-        public static final int about_drop_in_app_button=0x7f080078;
+        public static final int about_because_water_button=0x7f080078;
+        public static final int about_drop_in_app_button=0x7f080079;
         public static final int action_bar=0x7f080044;
         public static final int action_bar_activity_content=0x7f08002b;
         public static final int action_bar_container=0x7f080043;
@@ -2064,11 +2064,11 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f080041;
         public static final int action_mode_bar_stub=0x7f080040;
         public static final int action_mode_close_button=0x7f080033;
-        public static final int action_settings=0x7f08007d;
+        public static final int action_settings=0x7f08007e;
         public static final int activity_chooser_view_content=0x7f080034;
         public static final int add_a_drop_text=0x7f080057;
         public static final int add_drop_button=0x7f080063;
-        public static final int add_new=0x7f08007c;
+        public static final int add_new=0x7f08007d;
         public static final int always=0x7f08001e;
         public static final int because_water_banner=0x7f080055;
         public static final int beginning=0x7f080023;
@@ -2081,7 +2081,7 @@ containing a value of this type.
         public static final int checkbox=0x7f08003c;
         public static final int classic=0x7f080011;
         public static final int collapseActionView=0x7f080020;
-        public static final int contact_us_button=0x7f08007a;
+        public static final int contact_us_button=0x7f08007b;
         public static final int contact_us_title=0x7f080064;
         public static final int container=0x7f080053;
         public static final int decor_content_parent=0x7f080042;
@@ -2129,14 +2129,15 @@ containing a value of this type.
         public static final int never=0x7f08001c;
         public static final int none=0x7f080000;
         public static final int normal=0x7f080001;
-        public static final int online_store_button=0x7f080079;
+        public static final int online_store_button=0x7f08007a;
         public static final int pinterest_button=0x7f08006c;
         public static final int pinterest_icon=0x7f08006b;
-        public static final int privacy_policy_button=0x7f08007b;
+        public static final int privacy_policy_button=0x7f08007c;
         public static final int production=0x7f080007;
         public static final int progress_circular=0x7f08002f;
         public static final int progress_horizontal=0x7f080030;
         public static final int radio=0x7f08003e;
+        public static final int refresh_map=0x7f080077;
         public static final int report_a_problem=0x7f080074;
         public static final int sandbox=0x7f080008;
         public static final int satellite=0x7f080002;

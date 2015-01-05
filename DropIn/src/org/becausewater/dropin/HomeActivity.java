@@ -54,14 +54,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 
 public class HomeActivity extends ActionBarActivity {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavDrawerFragment mNavDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+	/*
+	 * Member variables declared here. For the most part, they need to be here in order to be referenced in multiple
+	 * functions and to be used in event listeners while maintaining dynamic allocation. 
+	 */
+	
+    private NavDrawerFragment mNavDrawerFragment; // Managed behaviors, interactions, and presentation of the nav drawer
     private static MapFragment map;
     private static Contact_Fragment cf;
     private static Simple_Fragment sf;
@@ -74,6 +72,10 @@ public class HomeActivity extends ActionBarActivity {
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
+    /*
+     * Member functions declared and defined here.
+     */
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,7 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        Button refreshMap = (Button) findViewById(R.id.refresh_map);
         Button aboutBecauseWater = (Button) findViewById(R.id.about_because_water_button);
         Button aboutDropInApp = (Button) findViewById(R.id.about_drop_in_app_button);
         Button onlineStore = (Button) findViewById(R.id.online_store_button);
@@ -132,6 +135,14 @@ public class HomeActivity extends ActionBarActivity {
         Button privacyPolicy = (Button) findViewById(R.id.privacy_policy_button);
         
         storeURL = Uri.parse("http://becausewater.org/store-2/");
+        
+        refreshMap.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		mDrawerLayout.closeDrawer(Gravity.LEFT);
+        		map.refresh();
+        	}
+        });
         
         aboutBecauseWater.setOnClickListener(new OnClickListener() {
 			@Override
@@ -223,7 +234,6 @@ public class HomeActivity extends ActionBarActivity {
         actionBar.setCustomView(v, layout);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mMenu = menu;
@@ -271,6 +281,10 @@ public class HomeActivity extends ActionBarActivity {
     	map.addPin(drop);
     }
     
+    /*
+     * Fragments begin here. Used to manage behavior of the various fragments in the activity.
+     */
+    
     public static class MapFragment extends Fragment {
 
     	private MapView mapView;
@@ -281,6 +295,7 @@ public class HomeActivity extends ActionBarActivity {
 		private ArrayList<Drop> drops;
 		private HashMap<Marker, Drop> dropMap;
         private Info_Fragment info;
+        
     	
         public MapFragment() {
         }
@@ -288,8 +303,6 @@ public class HomeActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            LatLng myLatLng;
-            CameraPosition myPosition;
             dropMap = new HashMap<Marker, Drop>();
         	
             // get MapView from layout
@@ -306,23 +319,7 @@ public class HomeActivity extends ActionBarActivity {
             locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
             map.getUiSettings().setZoomControlsEnabled(true);
             
-            Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(myLocation != null) {
-            	latitude = myLocation.getLatitude();
-            	longitude = myLocation.getLongitude();
-            }
-            myLatLng = new LatLng(latitude, longitude);
-        	myPosition = new CameraPosition.Builder()
-    			.target(myLatLng)
-    			.zoom(16)
-    			.bearing(0)
-    			.tilt(0)
-    			.build();
-        	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
-            
-            queryDatabase();
-            for(int i = 0; i < drops.size(); ++i)
-            	addPin(drops.get(i));
+            refresh();
         	
         	map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override
@@ -339,7 +336,39 @@ public class HomeActivity extends ActionBarActivity {
             return rootView;
         }
         
+        private void refresh() {
+            LatLng myLatLng;
+            CameraPosition myPosition;
+            
+            Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(myLocation != null) {
+            	latitude = myLocation.getLatitude();
+            	longitude = myLocation.getLongitude();
+            }
+            myLatLng = new LatLng(latitude, longitude);
+        	myPosition = new CameraPosition.Builder()
+    			.target(myLatLng)
+    			.zoom(16)
+    			.bearing(0)
+    			.tilt(0)
+    			.build();
+        	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+            
+            queryDatabase();
+            
+            for(int i = 0; i < drops.size(); ++i)
+            	addPin(drops.get(i));
+        }
+        
         private void queryDatabase() {
+        	
+        	// Reset map
+        	if(drops != null) {
+        		for(int i = 0; i < drops.size(); ++i)
+        			drops.get(i).getMarker().remove();
+        	}
+        	
+        	// Set up query address
     		String url_part1 = "foobar";
     		String url_part2 = "&lng=";
     		String url_part3 = "&radius=10";
@@ -349,6 +378,7 @@ public class HomeActivity extends ActionBarActivity {
     				.concat(Double.toString(longitude))
     				.concat(url_part3);
     		
+    		// Get query results
         	JSONParser jParser = new JSONParser(url);
         	jParser.fetchJSON(); // Busy-waits in this method until the thread is complete
         	
@@ -380,6 +410,7 @@ public class HomeActivity extends ActionBarActivity {
     		else
     			marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.add_drop_marker1_55));
         	
+        	drop.setMarker(marker);
         	dropMap.put(marker, drop); // Make drop accessible by unique LatLng
         }
         
@@ -588,7 +619,7 @@ public class HomeActivity extends ActionBarActivity {
             
             return rootView;
     	}
-        
+
         @Override
         public void onResume() {
         	mapView2.onResume();
@@ -607,6 +638,7 @@ public class HomeActivity extends ActionBarActivity {
         	mapView2.onLowMemory();
         }
     }
+
 
     public static class Contact_Fragment extends Fragment {
     	
@@ -680,6 +712,7 @@ public class HomeActivity extends ActionBarActivity {
     	}
     }
 
+
     public static class Info_Fragment extends Fragment {
     	
     	View rootView;
@@ -731,6 +764,7 @@ public class HomeActivity extends ActionBarActivity {
     		return rootView;
     	}
     }
+
 
     public static class Simple_Fragment extends Fragment {
     	private View rootView;

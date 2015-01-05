@@ -14,6 +14,23 @@
         android:orientation="vertical" >
         
         <Button
+            android:id="@+id/refresh_map"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh Map"
+        	android:textColor="@drawable/nav_button_text"
+        	android:textSize="18sp"
+        	android:textAllCaps="false"
+        	android:gravity="left|center_vertical"
+        	android:background="@drawable/nav_button_background" />
+        
+        <!-- Line divider -->
+        <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+            android:background="#A8A8A8" />
+        
+        <Button
             android:id="@+id/about_because_water_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -24,7 +41,7 @@
         	android:gravity="left|center_vertical"
         	android:background="@drawable/nav_button_background" />
         
-        <!-- This is just a line divider - graphical cake icing -->
+        <!-- Line divider -->
         <View
             android:layout_height="1dp"
             android:layout_width="fill_parent"

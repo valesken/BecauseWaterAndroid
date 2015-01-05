@@ -1,5 +1,7 @@
 package org.becausewater.dropin;
 
+import com.google.android.gms.maps.model.Marker;
+
 public class Drop {
 
 	/*
@@ -7,6 +9,7 @@ public class Drop {
 	 */
 	private double latitude, longitude;
 	private String name, details, category, address;
+	private Marker marker;
 	
 	/*
 	 *  Constructors
@@ -47,6 +50,10 @@ public class Drop {
 		return address;
 	}
 	
+	public Marker getMarker() {
+		return marker; // Will return null if marker has not been set via setMarker(Marker m)
+	}
+	
 	/*
 	 *  Setters
 	 */
@@ -72,5 +79,9 @@ public class Drop {
 	
 	public void setAddress(String a) {
 		this.address = a;
+	}
+	
+	public void setMarker(Marker m) {
+		this.marker = m;
 	}
 }
