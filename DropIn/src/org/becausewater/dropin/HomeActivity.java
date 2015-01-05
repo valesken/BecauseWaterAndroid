@@ -39,8 +39,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -65,6 +67,8 @@ public class HomeActivity extends ActionBarActivity {
     private static MapFragment map;
     private static Contact_Fragment cf;
     private static Simple_Fragment sf;
+    private static LocationManager locationManager;
+    private static Drop lastDrop;
     private Context context;
     private Uri storeURL;
 	private boolean isDrawerOpen = false;
@@ -88,6 +92,7 @@ public class HomeActivity extends ActionBarActivity {
         fm = getSupportFragmentManager();
         map = new MapFragment();
         cf = new Contact_Fragment();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         
         if (savedInstanceState == null) {
             ft = fm.beginTransaction();
@@ -292,7 +297,6 @@ public class HomeActivity extends ActionBarActivity {
 
     	private MapView mapView;
     	private GoogleMap map;
-    	private LocationManager locationManager;
     	private double latitude = 42.3581, longitude = -71.0636;
     	private View rootView;
 		private ArrayList<Drop> drops;
@@ -319,7 +323,6 @@ public class HomeActivity extends ActionBarActivity {
             int actionBarSize = getActionBarHeight();
             map.setPadding(0, actionBarSize, 0, 0);
             
-            locationManager = (LocationManager) rootView.getContext().getSystemService(LOCATION_SERVICE);
             map.getUiSettings().setZoomControlsEnabled(true);
             
             refresh();
@@ -560,6 +563,17 @@ public class HomeActivity extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_confirm, container, false);
             context = rootView.getContext();
             
+            /*
+             * This OnTouchListener is used in order to ensure that the user cannot accidentally touch Views from
+             * the previous fragment (the Add_Fragment). E.g. Accidentally accessing the EditText @+id/user_inaddress 
+             */
+            rootView.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					return true;
+				}
+			});
+            
             mapView2 = (MapView) rootView.findViewById(R.id.mapview2);
             mapView2.onCreate(savedInstanceState);
             map = mapView2.getMap();
@@ -731,16 +745,30 @@ public class HomeActivity extends ActionBarActivity {
 
     public static class Info_Fragment extends Fragment {
     	
-    	View rootView;
+    	private View rootView;
     	private Drop drop;
+    	private double latitude, longitude;
+    	private String saddr, daddr;
+    	
+    	public Info_Fragment() {
+    		if(lastDrop == null)
+    			this.drop = new Drop();
+    		else
+    			this.drop = lastDrop;
+    		latitude = 0;
+    		longitude = 0;
+    	}
     	
     	public Info_Fragment(Drop d) {
     		this.drop = d;
+    		latitude = 0;
+    		longitude = 0;
     	}
     	
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     		rootView = inflater.inflate(R.layout.fragment_drop_info, container, false);
+    		lastDrop = drop;
     		
     		TextView dropTitle = (TextView) rootView.findViewById(R.id.drop_info_title);
     		dropTitle.setText(drop.getName());
@@ -748,6 +776,12 @@ public class HomeActivity extends ActionBarActivity {
     		dropAddress.setText(drop.getAddress());
     		TextView dropDescription = (TextView) rootView.findViewById(R.id.drop_info_description);
     		dropDescription.setText(drop.getDetails());
+    		
+    		Location myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(myLocation != null) {
+            	latitude = myLocation.getLatitude();
+            	longitude = myLocation.getLongitude();
+            }
     		
     		Button report = (Button) rootView.findViewById(R.id.report_a_problem);
     		Button toHere = (Button) rootView.findViewById(R.id.drop_info_to_here);
@@ -767,13 +801,21 @@ public class HomeActivity extends ActionBarActivity {
     		toHere.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					
+					saddr = "".concat(Double.toString(latitude)).concat(",").concat(Double.toString(longitude));
+					daddr = "".concat(Double.toString(drop.getLatitude())).concat(",").concat(Double.toString(drop.getLongitude()));
+					Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr));
+					fm.popBackStack();
+					startActivity(i);
 				}
 			});
     		fromHere.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					
+					saddr = "".concat(Double.toString(drop.getLatitude())).concat(",").concat(Double.toString(drop.getLongitude()));
+					daddr = "".concat(Double.toString(latitude)).concat(",").concat(Double.toString(longitude));
+					Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr));
+					fm.popBackStack();
+					startActivity(i);
 				}
 			});
     		

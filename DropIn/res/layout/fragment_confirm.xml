@@ -34,6 +34,11 @@
     	    android:layout_height="wrap_content"
     	    android:layout_below="@+id/name_of_location_text"
 			android:layout_margin="1dp"
+			android:nextFocusLeft="@+id/add_drop_button"
+			android:nextFocusUp="@+id/add_drop_button"
+			android:nextFocusDown="@+id/loc_description"
+			android:nextFocusRight="@+id/loc_description"
+			android:nextFocusForward="@+id/loc_description"
 			android:padding="5dp"
 			android:hint="Clever Name Goes Here"
         	android:inputType="text"
@@ -56,6 +61,11 @@
     	    android:layout_height="wrap_content"
     	    android:layout_below="@+id/loc_description_text"
 			android:layout_margin="1dp"
+			android:nextFocusLeft="@+id/name_of_location"
+			android:nextFocusUp="@+id/name_of_location"
+			android:nextFocusRight="@+id/add_drop_button"
+			android:nextFocusDown="@+id/add_drop_button"
+			android:nextFocusForward="@+id/add_drop_button"
 			android:padding="5dp"
         	android:background="#FFFFFF"
         	android:inputType="textMultiLine"
@@ -64,7 +74,7 @@
         	android:gravity="top|left"
         	android:hint="Lorem ipsum dolor sit amet, consectetur..." />
     	
-    	<Button
+    	<!-- <Button
     	    android:id="@+id/upload_image_button"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
@@ -74,14 +84,19 @@
         	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
-        	android:background="@drawable/button_background" />
+        	android:background="@drawable/button_background" /> -->
     	
     	<Button
     	    android:id="@+id/add_drop_button"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:layout_below="@+id/upload_image_button"
-    	    android:layout_marginTop="5dp"
+    	    android:layout_below="@+id/loc_description"
+    	    android:layout_marginTop="15dp"
+			android:nextFocusLeft="@+id/loc_description"
+			android:nextFocusUp="@+id/loc_description"
+			android:nextFocusRight="@+id/name_of_location"
+			android:nextFocusDown="@+id/name_of_location"
+			android:nextFocusForward="@+id/name_of_location"
     	    android:text="Add Drop"
         	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
