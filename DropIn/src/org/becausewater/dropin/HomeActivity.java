@@ -321,7 +321,7 @@ public class HomeActivity extends ActionBarActivity {
             map.setMyLocationEnabled(true);
 
             int actionBarSize = getActionBarHeight();
-            map.setPadding(0, actionBarSize, 0, 0);
+            map.setPadding(0, actionBarSize, 0, actionBarSize);
             
             map.getUiSettings().setZoomControlsEnabled(true);
             

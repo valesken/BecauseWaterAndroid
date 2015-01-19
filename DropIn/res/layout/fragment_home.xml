@@ -3,33 +3,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.becausewater.dropin.HomeActivity$MapFragment" >
-
-    <!-- <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Map Goes Here" /> -->
     
     <com.google.android.gms.maps.MapView android:id="@+id/mapview"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" />
     
     <RelativeLayout
-        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/my_translucent_gray" >
         
-        <!-- <Button
-            android:id="@+id/add_new"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:onClick="toAdd"
-            android:text="add"
-            android:textColor="#0088FF"
-            android:textAllCaps="false" /> -->
+    	<LinearLayout
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp"
+        	android:layout_centerHorizontal="true"
+        	android:orientation="horizontal" >
         
+        	<ImageView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/add_drop_marker2_32" />
+        
+        	<TextView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_gravity="center_vertical"
+            	android:text="Local Business"
+            	android:textColor="@color/abc_primary_text_material_light"
+            	android:textSize="11sp" />
+        
+        	<ImageView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/add_drop_marker1_32" />
+	        
+    	    <TextView
+        	    android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_gravity="center_vertical"
+            	android:text="User Submitted"
+            	android:textColor="@color/abc_primary_text_material_light"
+            	android:textSize="11sp" />
+	        
+    	    <ImageView
+        	    android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/add_drop_marker3_32" />
+        
+	        <TextView
+    	        android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+            	android:layout_gravity="center_vertical"
+            	android:text="Public Fountain"
+            	android:textColor="@color/abc_primary_text_material_light"
+            	android:textSize="11sp" />"
+        
+	    </LinearLayout>
+	    
     </RelativeLayout>
 
 </RelativeLayout>
