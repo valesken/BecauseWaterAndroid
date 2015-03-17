@@ -157,10 +157,10 @@ public class HomeActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				if(fm.getBackStackEntryCount() > 0)
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
-				sf = new Simple_Fragment(true);
+				sf = new Simple_Fragment(0);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
 				if(fragmentName != "infoBW") {
-					if(fragmentName == "infoDI" || fragmentName == "cf")
+					if(fragmentName == "infoDI" || fragmentName == "cf" || fragmentName == "privacy")
 						fm.popBackStack();
 					ft = fm.beginTransaction();
 					ft.add(R.id.container, sf)
@@ -175,10 +175,10 @@ public class HomeActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				if(fm.getBackStackEntryCount() > 0)
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
-				sf = new Simple_Fragment(false);
+				sf = new Simple_Fragment(1);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
 				if(fragmentName != "infoDI") {
-					if(fragmentName == "infoBW" || fragmentName == "cf") 
+					if(fragmentName == "infoBW" || fragmentName == "cf" || fragmentName == "privacy") 
 						fm.popBackStack();
 					ft = fm.beginTransaction();
 					ft.add(R.id.container, sf)
@@ -203,7 +203,7 @@ public class HomeActivity extends ActionBarActivity {
 					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
 				if(fragmentName != "cf") {
-					if(fragmentName == "infoBW" || fragmentName == "infoDI")
+					if(fragmentName == "infoBW" || fragmentName == "infoDI" || fragmentName == "privacy")
 						fm.popBackStack();
 					ft = fm.beginTransaction();
 					ft.add(R.id.container, cf)
@@ -216,15 +216,19 @@ public class HomeActivity extends ActionBarActivity {
         privacyPolicy.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(fm.getBackStackEntryCount() > 0)
+					fragmentName = fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName();
+				sf = new Simple_Fragment(2);
 				mDrawerLayout.closeDrawer(Gravity.LEFT);
-				new AlertDialog.Builder(context)
-					.setMessage(R.string.privacy_policy_string)
-					.setTitle("Privacy Policy")
-					.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) { } // Do nothing to just go back
-					})
-					.show();
+				if(fragmentName != "privacy") {
+					if(fragmentName == "infoDI" || fragmentName == "cf" || fragmentName == "infoBW")
+						fm.popBackStack();
+					ft = fm.beginTransaction();
+					ft.add(R.id.container, sf)
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+						.addToBackStack("privacy")
+						.commit();
+				}
 			}
 		});
     }
@@ -375,7 +379,7 @@ public class HomeActivity extends ActionBarActivity {
         	}
         	
         	// Set up query address
-    		String url_part1 = "foobar";
+    		String url_part1 = "foobar&action=get&lat=";
     		String url_part2 = "&lng=";
     		String url_part3 = "&radius=10";
     		String url = "".concat(url_part1)
@@ -478,7 +482,7 @@ public class HomeActivity extends ActionBarActivity {
             if(mMenu != null)
             	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_blank).setEnabled(false);
             
-            Button submit = (Button) rootView.findViewById(R.id.submit_button);
+            Button submit = (Button) rootView.findViewById(R.id.confirm_button);
             Button useMyLoc = (Button) rootView.findViewById(R.id.use_my_loc_button);
             
             submit.setOnClickListener(new OnClickListener() {
@@ -542,7 +546,7 @@ public class HomeActivity extends ActionBarActivity {
     	private String address_string, url_string;
     	private Context context;
     	private double latitude, longitude;
-    	private EditText locationName, locationDescription;
+    	private EditText locationName, locationDescription, userName;
     	private URLEncoder urlEncoder;
     	MapView mapView2;
     	GoogleMap map;
@@ -610,6 +614,7 @@ public class HomeActivity extends ActionBarActivity {
             
         	locationName = (EditText) rootView.findViewById(R.id.name_of_location);
         	locationDescription = (EditText) rootView.findViewById(R.id.loc_description);
+        	userName = (EditText) rootView.findViewById(R.id.user_name);
             Button confirm = (Button) rootView.findViewById(R.id.add_drop_button);
             confirm.setOnClickListener(new OnClickListener() {
 				@Override
@@ -625,9 +630,10 @@ public class HomeActivity extends ActionBarActivity {
 		            drop.setDetails(locationDescription.getText().toString());
 		            drop.setCategory("User Submitted");
 		            drop.setAddress(address_string);
-		            //addPin(drop);
+		            drop.setUser(userName.getText().toString());
 		            try {
-		            url_string = url_string.concat("foobar")
+		            	//name, address, category, lat, lng, details, locationName, personName
+		            url_string = url_string.concat("foobar&action=push&lat=")
 		            		.concat(urlEncoder.encode(Double.toString(latitude), "UTF-8"))
 		            		.concat("&lng=")
 		            		.concat(urlEncoder.encode(Double.toString(longitude), "UTF-8"))
@@ -638,7 +644,11 @@ public class HomeActivity extends ActionBarActivity {
 		            		.concat("&category=")
 		            		.concat(urlEncoder.encode(Integer.toString(3), "UTF-8"))
 		            		.concat("&details=")
-		            		.concat(urlEncoder.encode(drop.getDetails(), "UTF-8"));
+		            		.concat(urlEncoder.encode(drop.getDetails(), "UTF-8"))
+		            		.concat("&personName=")
+		            		.concat(urlEncoder.encode(drop.getUser(), "UTF-8"))
+		            		.concat("&locationName=")
+		            		.concat(urlEncoder.encode(drop.getName(), "UTF-8"));
 		            }
 		            catch (UnsupportedEncodingException e) {
 		            	e.printStackTrace();
@@ -826,18 +836,27 @@ public class HomeActivity extends ActionBarActivity {
 
     public static class Simple_Fragment extends Fragment {
     	private View rootView;
-    	private boolean becauseWater;
+    	private int layoutNumber;
     	
-    	public Simple_Fragment(boolean bw) {
-    		this.becauseWater = bw;
+    	public Simple_Fragment(int num) {
+    		this.layoutNumber = num;
     	}
     	
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            if(becauseWater)
+            
+            switch(layoutNumber)
+            {
+            case 0:
             	rootView = inflater.inflate(R.layout.fragment_about_because_water, container, false);
-            else
+            	break;
+            case 1:
             	rootView = inflater.inflate(R.layout.fragment_about_drop_in, container, false);
+            	break;
+            case 2:
+            	rootView = inflater.inflate(R.layout.fragment_privacy, container, false);
+            	break;
+            }
             
             return rootView;
     	}

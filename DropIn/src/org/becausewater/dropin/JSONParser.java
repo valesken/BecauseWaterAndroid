@@ -79,7 +79,7 @@ public class JSONParser {
 					drop.setLatitude(obj.getDouble("lat"));
 					drop.setLongitude(obj.getDouble("lng"));
 					drop.setAddress(obj.getString("address"));
-					drop.setName(obj.getString("name"));
+					drop.setName(obj.getString("locationName"));
 					drop.setDetails(obj.getString("details"));
 					drop.setCategory(obj.getString("category"));
 					drops.add(drop);

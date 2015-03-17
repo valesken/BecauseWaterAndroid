@@ -8,7 +8,7 @@ public class Drop {
 	 * Member Variables
 	 */
 	private double latitude, longitude;
-	private String name, details, category, address;
+	private String name, details, category, address, user;
 	private Marker marker;
 	
 	/*
@@ -21,6 +21,7 @@ public class Drop {
 		details = "";
 		category = "";
 		address = "";
+		user = "";
 	}
 	
 	/*
@@ -48,6 +49,10 @@ public class Drop {
 	
 	public String getAddress() {
 		return address;
+	}
+	
+	public String getUser() {
+		return user;
 	}
 	
 	public Marker getMarker() {
@@ -79,6 +84,10 @@ public class Drop {
 	
 	public void setAddress(String a) {
 		this.address = a;
+	}
+	
+	public void setUser(String u) {
+		this.user = u;
 	}
 	
 	public void setMarker(Marker m) {

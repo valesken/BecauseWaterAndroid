@@ -21,6 +21,7 @@
             android:textColor="#000000" />
         
 		<!-- Use My Location Button -->
+		
 		<Button
 			android:id="@+id/use_my_loc_button"
         	android:layout_width="match_parent"
@@ -33,20 +34,39 @@
         	android:textAllCaps="false"
         	android:textAlignment="center"
         	android:background="@drawable/button_background" />
+		
+		<!-- Location Name TextView -->
+    
+    	<TextView
+    	    android:id="@+id/name_of_location_text"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+    	    android:layout_below="@+id/use_my_loc_button"
+        	android:text="NAME OF LOCATION:"
+    		android:textColor="#000000"
+    		android:layout_marginTop="10dp"
+    		android:layout_marginLeft="10dp"
+    		android:layout_marginBottom="5dp" />
+    
+    	<EditText
+    	    android:id="@+id/name_of_location"
+	        android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content"
+    	    android:layout_below="@+id/name_of_location_text"
+			android:layout_margin="1dp"
+			android:padding="5dp"
+			android:hint="Clever Name Goes Here"
+        	android:inputType="text"
+        	android:background="#FFFFFF" />
 
 		<!-- Enter An Address TextView -->
-		
-		<View 
-		    android:id="@+id/separator1"
-		    android:layout_width="match_parent"
-		    android:layout_height="50dp"
-    		android:layout_below="@+id/use_my_loc_button" />
 
     	<TextView
     		android:id="@+id/enter_address"
     		android:layout_width="match_parent"
     		android:layout_height="wrap_content"
-    		android:layout_below="@+id/separator1"
+    		android:layout_below="@+id/name_of_location"
+    		android:layout_marginTop="10dp"
     		android:layout_marginLeft="10dp"
     		android:layout_marginBottom="5dp"
     		android:text="ENTER AN ADDRESS:"
@@ -66,15 +86,15 @@
         	android:background="#FFFFFF" />
         
 
-		<!-- Submit Button -->
+		<!-- Confirm Button -->
 
 		<Button
-        	android:id="@+id/submit_button"
+        	android:id="@+id/confirm_button"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
         	android:layout_below="@+id/user_inaddress"
 			android:layout_margin="1dp"
-        	android:text="Submit"
+        	android:text="Confirm"
         	android:textColor="@drawable/button_text"
         	android:textSize="18sp"
         	android:textAllCaps="false"
@@ -84,7 +104,7 @@
 		<TextView
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/submit_button"
+		    android:layout_below="@+id/confirm_button"
 		    android:layout_margin="1dp"
 		    android:text="Enter an address above to add a drop, or use Location Service to automatically determine your location." />
 		
