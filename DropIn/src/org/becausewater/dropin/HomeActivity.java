@@ -379,7 +379,7 @@ public class HomeActivity extends ActionBarActivity {
         	}
         	
         	// Set up query address
-    		String url_part1 = "foobar&action=get&lat=";
+        	String url_part1 = "foobar";
     		String url_part2 = "&lng=";
     		String url_part3 = "&radius=10";
     		String url = "".concat(url_part1)
@@ -459,7 +459,7 @@ public class HomeActivity extends ActionBarActivity {
     	private double longitude, latitude;
     	private String result;
         private Context context;
-        private EditText enter_address;
+        private EditText enter_address, locationName;
         private List<Address> addresses;
         private Address address;
         private Geocoder geocoder;
@@ -479,6 +479,7 @@ public class HomeActivity extends ActionBarActivity {
             rootView = inflater.inflate(R.layout.fragment_add_droplet, container, false);
             context = rootView.getContext();
             setToCurrentLoc();
+            locationName = (EditText) rootView.findViewById(R.id.name_of_location);
             if(mMenu != null)
             	mMenu.findItem(R.id.add_new).setIcon(R.drawable.ic_action_blank).setEnabled(false);
             
@@ -488,18 +489,24 @@ public class HomeActivity extends ActionBarActivity {
             submit.setOnClickListener(new OnClickListener() {
             	@Override
             	public void onClick(View v) {
-            		if(enter_address.getText().toString().length() > 0) {
-            			ft = fm.beginTransaction();
-            			Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString());
-            			ft.add(R.id.container, cf)
-          			  	  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            			  .addToBackStack("cf")
-            			  .commit();
-            		}
-            		else {
-            			Toast.makeText(context, "Please enter an address", Toast.LENGTH_LONG)
-            				.show();
-            		}
+        			if(locationName.getText().toString().length() > 0) {
+        				if(enter_address.getText().toString().length() > 0) {
+        					ft = fm.beginTransaction();
+        					Confirm_Fragment cf = new Confirm_Fragment(enter_address.getText().toString(), locationName.getText().toString());
+        					ft.add(R.id.container, cf)
+          			  	  		.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+          			  	  		.addToBackStack("cf")
+          			  	  		.commit();
+        				}
+        				else {
+        					Toast.makeText(context, "Please enter an address", Toast.LENGTH_LONG)
+            					.show();
+        				}
+        			}
+        			else {
+        				Toast.makeText(context, "Please enter a name for the address", Toast.LENGTH_LONG)
+    						.show();
+        			}
             	}
             });
             useMyLoc.setOnClickListener(new OnClickListener() {
@@ -543,10 +550,10 @@ public class HomeActivity extends ActionBarActivity {
     
     public static class Confirm_Fragment extends Fragment {
     	
-    	private String address_string, url_string;
+    	private String address_string, url_string, location_name;
     	private Context context;
     	private double latitude, longitude;
-    	private EditText locationName, locationDescription, userName;
+    	private EditText locationDescription, userName;
     	private URLEncoder urlEncoder;
     	MapView mapView2;
     	GoogleMap map;
@@ -555,11 +562,19 @@ public class HomeActivity extends ActionBarActivity {
     	public Confirm_Fragment() {
     		address_string = "";
     		url_string = "";
+    		location_name = "";
     	}
     	
     	public Confirm_Fragment(String r) {
     		address_string = r;
     		url_string = "";
+    		location_name = "";
+    	}
+    	
+    	public Confirm_Fragment(String r, String l) {
+    		address_string = r;
+    		url_string = "";
+    		location_name = l;
     	}
     	
     	@Override
@@ -612,7 +627,6 @@ public class HomeActivity extends ActionBarActivity {
 				.build();
         	map.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
             
-        	locationName = (EditText) rootView.findViewById(R.id.name_of_location);
         	locationDescription = (EditText) rootView.findViewById(R.id.loc_description);
         	userName = (EditText) rootView.findViewById(R.id.user_name);
             Button confirm = (Button) rootView.findViewById(R.id.add_drop_button);
@@ -626,14 +640,14 @@ public class HomeActivity extends ActionBarActivity {
 		            Drop drop = new Drop();
 		            drop.setLatitude(latitude);
 		            drop.setLongitude(longitude);
-		            drop.setName(locationName.getText().toString());
+		            drop.setName(location_name);
 		            drop.setDetails(locationDescription.getText().toString());
 		            drop.setCategory("User Submitted");
 		            drop.setAddress(address_string);
 		            drop.setUser(userName.getText().toString());
 		            try {
 		            	//name, address, category, lat, lng, details, locationName, personName
-		            url_string = url_string.concat("foobar&action=push&lat=")
+		            	url_string = url_string.concat("foobar")
 		            		.concat(urlEncoder.encode(Double.toString(latitude), "UTF-8"))
 		            		.concat("&lng=")
 		            		.concat(urlEncoder.encode(Double.toString(longitude), "UTF-8"))
