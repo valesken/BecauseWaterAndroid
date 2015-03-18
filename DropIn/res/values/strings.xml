@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DropIn</string>
+    <string name="app_name">Drop In</string>
     <string name="about_drop_in_app">About Drop In App</string>
     <string name="about_because_water">About Because Water</string>
     <string name="online_store">Online Store</string>
