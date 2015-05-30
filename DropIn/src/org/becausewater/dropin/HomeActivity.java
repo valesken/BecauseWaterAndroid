@@ -32,6 +32,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -74,8 +76,12 @@ public class HomeActivity extends ActionBarActivity {
 	private boolean isDrawerOpen = false;
     private String fragmentName = "";
     private static JSONParser jParser;
+    private static ConnectivityManager connectivityManager;
+    private static NetworkInfo networkInfo;
+    
     protected static Intent launchBrowser;
     protected static Menu mMenu;
+    
     public static FragmentManager fm;
     public static FragmentTransaction ft;
 
@@ -232,8 +238,8 @@ public class HomeActivity extends ActionBarActivity {
 			}
 		});
     }
-    
-    public void restoreActionBar() {
+
+	public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(true);
@@ -315,6 +321,18 @@ public class HomeActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_home, container, false);
             dropMap = new HashMap<Marker, Drop>();
+            
+            if(!isConnected()) {
+            	new AlertDialog.Builder(rootView.getContext())
+            		.setTitle("No Connection")
+            		.setIcon(android.R.drawable.ic_dialog_alert)
+            		.setMessage("Internet not available. You will not be able to see drops. Please check your connectivity and then refresh or reload Drop In.")
+            		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            			@Override
+            			public void onClick(DialogInterface dialog, int which) { }
+            		})
+            		.show();
+            }
         	
             // get MapView from layout
             mapView = (MapView) rootView.findViewById(R.id.mapview);
@@ -344,6 +362,28 @@ public class HomeActivity extends ActionBarActivity {
 			});
             
             return rootView;
+        }
+        
+        private boolean isConnected() {
+    		connectivityManager = (ConnectivityManager) rootView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    		networkInfo = connectivityManager.getActiveNetworkInfo();
+    		
+    		if(networkInfo == null || !networkInfo.isConnected() || !networkInfo.isAvailable())
+    			return false;
+    		
+    		return true;
+    	}
+        
+        public void toAdd() {
+        	Location myLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	latitude = myLoc.getLatitude();
+        	longitude = myLoc.getLongitude();
+        	ft = fm.beginTransaction();
+        	Add_Fragment af = new Add_Fragment(latitude, longitude);
+        	ft.add(R.id.container, af)
+			  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        	  .addToBackStack("af")
+        	  .commit();
         }
         
         private void refresh() {
@@ -381,12 +421,10 @@ public class HomeActivity extends ActionBarActivity {
         	// Set up query address
         	String url_part1 = "foobar";
     		String url_part2 = "&lng=";
-    		String url_part3 = "&radius=10";
     		String url = "".concat(url_part1)
     				.concat(Double.toString(latitude))
     				.concat(url_part2)
-    				.concat(Double.toString(longitude))
-    				.concat(url_part3);
+    				.concat(Double.toString(longitude));
     		
     		// Get query results
         	jParser = new JSONParser(url);
@@ -394,18 +432,6 @@ public class HomeActivity extends ActionBarActivity {
         	
         	drops = new ArrayList<Drop>();
         	jParser.getDrops(drops);
-        }
-        
-        public void toAdd() {
-        	Location myLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        	latitude = myLoc.getLatitude();
-        	longitude = myLoc.getLongitude();
-        	ft = fm.beginTransaction();
-        	Add_Fragment af = new Add_Fragment(latitude, longitude);
-        	ft.add(R.id.container, af)
-			  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        	  .addToBackStack("af")
-        	  .commit();
         }
         
         public void addPin(Drop drop) {
@@ -693,7 +719,6 @@ public class HomeActivity extends ActionBarActivity {
         }
     }
 
-
     public static class Contact_Fragment extends Fragment {
     	
     	View rootView;
@@ -765,7 +790,6 @@ public class HomeActivity extends ActionBarActivity {
     		return rootView;
     	}
     }
-
 
     public static class Info_Fragment extends Fragment {
     	
@@ -846,7 +870,6 @@ public class HomeActivity extends ActionBarActivity {
     		return rootView;
     	}
     }
-
 
     public static class Simple_Fragment extends Fragment {
     	private View rootView;

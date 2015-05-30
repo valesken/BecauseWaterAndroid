@@ -70,22 +70,22 @@ public class JSONParser {
 		Drop drop;
 		try {
 			JSONObject reader = new JSONObject(in);
-			for(int i = 0; i < 30; ++i) {
+			objs.clear();
+			for(int i = 0; reader.has(Integer.toString(i)); ++i) {
 				index = Integer.toString(i);
-				if(reader.has(index)) {
-					objs.add(reader.getJSONObject(index));
-					obj = objs.get(i);
-					drop = new Drop();
-					drop.setLatitude(obj.getDouble("lat"));
-					drop.setLongitude(obj.getDouble("lng"));
-					drop.setAddress(obj.getString("address"));
+				objs.add(reader.getJSONObject(index));
+				obj = objs.get(i);
+				drop = new Drop();
+				drop.setLatitude(obj.getDouble("lat"));
+				drop.setLongitude(obj.getDouble("lng"));
+				drop.setAddress(obj.getString("address"));
+				if(!obj.getString("locationName").isEmpty())
 					drop.setName(obj.getString("locationName"));
-					drop.setDetails(obj.getString("details"));
-					drop.setCategory(obj.getString("category"));
-					drops.add(drop);
-				}
 				else
-					break;
+					drop.setName(obj.getString("name"));
+				drop.setDetails(obj.getString("details"));
+				drop.setCategory(obj.getString("category"));
+				drops.add(drop);
 			}
 		}
 		catch(Exception e) {
